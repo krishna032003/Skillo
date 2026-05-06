@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #111827;
+  
+  /* Skillo. Aesthetic Palette */
+  --accent-blue: #0052FF;
+  --accent-yellow: #FFD600;
+  --accent-green: #22C55E;
+  --accent-grey: #6B7280;
+  
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  --card-bg: #ffffff;
+  --card-border: #E5E7EB;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+}
+
+* { 
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+html, body, #__next { 
+  height: 100%; 
+  background: var(--background);
+  color: var(--foreground);
+  overflow-x: hidden;
+  font-family: var(--font-body);
+}
+
+/* ─── Typography ─── */
+.font-display { font-family: var(--font-heading); font-weight: 800; letter-spacing: -0.02em; }
+
+/* ─── Components ─── */
+.btn-primary-skillo {
+  background: var(--accent-blue);
+  color: #fff;
+  font-family: var(--font-body);
+  font-weight: 600;
+  padding: 12px 28px;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-primary-skillo:hover {
+  background: #0046E0;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0, 82, 255, 0.25);
+}
+
+.btn-secondary-skillo {
+  background: #000;
+  color: #fff;
+  font-family: var(--font-body);
+  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary-skillo:hover {
+  background: #1f2937;
+}
+
+/* ─── Cards & Containers ─── */
+.card-skillo {
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  box-shadow: var(--shadow-md);
+}
+
+.glass-nav {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+/* ─── Animations ─── */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* ─── Scrollbar ─── */
+.styled-scrollbar::-webkit-scrollbar { width: 6px; }
+.styled-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.styled-scrollbar::-webkit-scrollbar-thumb {
+  background: #E5E7EB;
+  border-radius: 10px;
+}
+
+/* ─── Utilities ─── */
+.text-blue { color: var(--accent-blue); }
+.bg-blue { background-color: var(--accent-blue); }

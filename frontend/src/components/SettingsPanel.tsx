@@ -1,0 +1,342 @@
+"use client";
+import React, { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { 
+  User, Bell, Shield, Globe, Terminal, 
+  Cpu, Zap, Save, ChevronRight, Moon,
+  Monitor, Smartphone, Keyboard, Camera, Upload, X, LogOut, Target, List
+} from "lucide-react";
+
+import { useRouter } from "next/navigation";
+import { API_BASE } from "@/services/api";
+
+export default function SettingsPanel() {
+  const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  const [activeSection, setActiveSection] = useState("profile");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [profile, setProfile] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Form State
+  const [editName, setEditName] = useState("");
+  const [editProfession, setEditProfession] = useState("");
+  const [editGoals, setEditGoals] = useState("");
+  const [editObjectives, setEditObjectives] = useState("");
+  const [editPicture, setEditPicture] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchProfile();
+    const savedTheme = localStorage.getItem("skillo_theme");
+    if (savedTheme === "dark") setIsDarkMode(true);
+  }, []);
+
+  const fetchProfile = async () => {
+    const userId = localStorage.getItem("lifeos_user_id");
+    if (!userId) {
+      setIsLoading(false);
+      return;
+    }
+    try {
+      const res = await fetch(`${API_BASE}/api/user/${encodeURIComponent(userId)}`);
+      if (res.ok) {
+        const data = await res.json();
+        setProfile(data);
+        setEditName(data.name || "");
+        setEditProfession(data.profession || "");
+        
+        // Handle both 'goals' and legacy 'active_goals'
+        const currentGoals = data.goals || data.active_goals || [];
+        setEditGoals(currentGoals.join("\n"));
+        
+        const currentObjs = data.objectives || [];
+        setEditObjectives(currentObjs.join("\n"));
+        
+        setEditPicture(data.picture || null);
+      }
+    } catch (error) {
+      console.error("Failed to fetch profile:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditPicture(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSaveChanges = async () => {
+    const userId = localStorage.getItem("lifeos_user_id");
+    if (!userId) return;
+
+    setIsSaving(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/onboard`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: userId,
+          name: editName,
+          profession: editProfession,
+          picture: editPicture,
+          goals: editGoals.split("\n").map(l => l.trim()).filter(Boolean),
+          objectives: editObjectives.split("\n").map(l => l.trim()).filter(Boolean),
+        }),
+      });
+      if (res.ok) {
+        localStorage.setItem("lifeos_user_name", editName);
+        if (editPicture) localStorage.setItem("lifeos_user_picture", editPicture);
+        
+        alert("Profile updated successfully!");
+        fetchProfile();
+      } else {
+        alert("Failed to update profile.");
+      }
+    } catch (error) {
+      alert("Error: Connection to server failed.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    const userId = localStorage.getItem("lifeos_user_id");
+    if (!userId) return;
+
+    const confirmed = window.confirm(
+      "CAUTION: This will permanently delete your Skillo account and all associated data. This action cannot be undone. Are you sure?"
+    );
+    if (!confirmed) return;
+
+    setIsDeleting(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/user/${encodeURIComponent(userId)}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        alert("Account deleted successfully.");
+        localStorage.clear();
+        window.location.href = "/login";
+      } else {
+        const err = await res.json();
+        alert(`Error: ${err.detail || "Failed to delete account"}`);
+      }
+    } catch (error) {
+      alert("Error: Connection to server failed.");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = "/login";
+  };
+
+  const sections = [
+    { id: "profile", label: "Profile", icon: User },
+    { id: "notifications", label: "Notifications", icon: Bell },
+    { id: "privacy", label: "Security", icon: Shield },
+    { id: "system", label: "System", icon: Cpu },
+  ];
+
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center dark:bg-[#0A0A0B] bg-white">
+        <div className="w-8 h-8 border-2 border-[#0052FF] border-t-transparent animate-spin rounded-full" />
+      </div>
+    );
+  }
+
+  const initials = editName.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2);
+
+  return (
+    <div className="flex h-full overflow-hidden transition-colors dark:bg-[#0A0A0B] bg-white text-gray-500">
+      {/* ── Sub-Sidebar ── */}
+      <aside className="w-64 border-r flex flex-col p-6 space-y-1 shrink-0 dark:bg-[#111112] dark:border-gray-800 border-gray-100">
+        <p className="px-4 py-3 text-[9px] font-black text-gray-400 uppercase tracking-[0.4em] mb-2">Configuration</p>
+        {sections.map((s) => (
+          <button
+            key={s.id}
+            onClick={() => setActiveSection(s.id)}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all ${
+              activeSection === s.id 
+              ? "bg-[#0052FF] text-white shadow-lg shadow-blue-500/20" 
+              : "text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50"
+            }`}
+          >
+            <s.icon size={16} />
+            <span className="text-[10px] font-bold uppercase tracking-widest">{s.label}</span>
+          </button>
+        ))}
+
+        <div className="mt-auto pt-6 border-t dark:border-gray-800 border-gray-100">
+           <button 
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all"
+           >
+              <LogOut size={16} />
+              <span className="text-[10px] font-bold uppercase tracking-widest">Sign Out</span>
+           </button>
+        </div>
+      </aside>
+
+      {/* ── Main Settings Content ── */}
+      <div className="flex-1 overflow-y-auto px-12 py-12 styled-scrollbar">
+        <div className="max-w-2xl space-y-10">
+          <header>
+            <h1 className="font-display text-3xl tracking-tight dark:text-white text-[#111827]">
+              {sections.find(s => s.id === activeSection)?.label} <span className="text-[#0052FF]">Settings.</span>
+            </h1>
+            <p className="text-gray-400 font-medium text-sm mt-1">
+              Management and configuration for your Skillo workspace.
+            </p>
+          </header>
+
+          <div className="space-y-10">
+            {activeSection === "profile" && (
+              <div className="space-y-10">
+                
+                {/* Profile Header Card */}
+                <div className="flex items-center gap-8 p-8 border rounded-[40px] dark:bg-gray-900/50 dark:border-gray-800 bg-gray-50/50 border-gray-100 backdrop-blur-sm">
+                   <div className="relative group">
+                      <div className="w-24 h-24 rounded-full border-2 border-white dark:border-gray-800 shadow-xl flex items-center justify-center overflow-hidden bg-white dark:bg-gray-800">
+                        {editPicture ? (
+                          <img src={editPicture} alt="Avatar" className="w-full h-full object-cover" />
+                        ) : (
+                          <span className="text-2xl font-black text-[#0052FF]">{initials || "GY"}</span>
+                        )}
+                      </div>
+                      <button 
+                        onClick={() => fileInputRef.current?.click()}
+                        className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-[#0052FF] text-white flex items-center justify-center shadow-lg hover:scale-110 transition-all border-2 border-white dark:border-gray-900"
+                      >
+                         <Camera size={14} />
+                      </button>
+                      <input type="file" ref={fileInputRef} onChange={handleImageChange} accept="image/*" className="hidden" />
+                   </div>
+                   <div className="space-y-1">
+                      <h3 className="text-xl font-display dark:text-white text-[#111827]">{editName || "New User"}</h3>
+                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{editProfession || "Skillo Member"}</p>
+                      <div className="flex gap-3 mt-3">
+                         <div className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-[8px] font-black text-[#0052FF] uppercase tracking-widest">Pro Account</div>
+                         <div className="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-[8px] font-black text-emerald-600 uppercase tracking-widest">Active</div>
+                      </div>
+                   </div>
+                </div>
+
+                {/* Edit Form */}
+                <div className="space-y-6">
+                   <h3 className="text-[9px] font-black text-gray-400 uppercase tracking-[0.3em] px-2">Identity & Objectives</h3>
+                   
+                   <div className="grid grid-cols-1 gap-5">
+                      <div className="space-y-2">
+                         <div className="flex items-center gap-2 ml-2">
+                            <User size={12} className="text-[#0052FF]" />
+                            <label className="text-[9px] font-black text-[#0052FF] uppercase tracking-[0.2em]">Display Name</label>
+                         </div>
+                         <input 
+                            value={editName}
+                            onChange={(e) => setEditName(e.target.value)}
+                            className="w-full px-6 py-4 rounded-[20px] border dark:bg-gray-900 dark:border-gray-800 dark:text-white bg-white border-gray-100 outline-none focus:border-[#0052FF] transition-all font-bold text-sm"
+                         />
+                      </div>
+
+                      <div className="space-y-2">
+                         <div className="flex items-center gap-2 ml-2">
+                            <Globe size={12} className="text-[#0052FF]" />
+                            <label className="text-[9px] font-black text-[#0052FF] uppercase tracking-[0.2em]">Profession</label>
+                         </div>
+                         <input 
+                            value={editProfession}
+                            onChange={(e) => setEditProfession(e.target.value)}
+                            className="w-full px-6 py-4 rounded-[20px] border dark:bg-gray-900 dark:border-gray-800 dark:text-white bg-white border-gray-100 outline-none focus:border-[#0052FF] transition-all font-bold text-sm"
+                         />
+                      </div>
+
+                      <div className="space-y-2">
+                         <div className="flex items-center gap-2 ml-2">
+                            <Target size={12} className="text-[#0052FF]" />
+                            <label className="text-[9px] font-black text-[#0052FF] uppercase tracking-[0.2em]">Primary Objectives</label>
+                         </div>
+                         <textarea 
+                            value={editObjectives}
+                            onChange={(e) => setEditObjectives(e.target.value)}
+                            rows={3}
+                            placeholder="e.g. Master React, Finish semester exams"
+                            className="w-full px-6 py-4 rounded-[20px] border dark:bg-gray-900 dark:border-gray-800 dark:text-white bg-white border-gray-100 outline-none focus:border-[#0052FF] transition-all font-bold text-sm resize-none"
+                         />
+                      </div>
+
+                      <div className="space-y-2">
+                         <div className="flex items-center gap-2 ml-2">
+                            <List size={12} className="text-[#0052FF]" />
+                            <label className="text-[9px] font-black text-[#0052FF] uppercase tracking-[0.2em]">Active Tasks / Goals</label>
+                         </div>
+                         <textarea 
+                            value={editGoals}
+                            onChange={(e) => setEditGoals(e.target.value)}
+                            rows={3}
+                            placeholder="e.g. Study 4 hours daily, Work on side project"
+                            className="w-full px-6 py-4 rounded-[20px] border dark:bg-gray-900 dark:border-gray-800 dark:text-white bg-white border-gray-100 outline-none focus:border-[#0052FF] transition-all font-bold text-sm resize-none"
+                         />
+                      </div>
+                   </div>
+                </div>
+
+                <div className="pt-2 flex justify-end">
+                   <button 
+                    onClick={handleSaveChanges}
+                    disabled={isSaving}
+                    className="flex items-center gap-2 px-8 py-4 bg-[#0052FF] text-white rounded-[20px] font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-blue-500/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
+                   >
+                      {isSaving ? <span className="w-3 h-3 border-2 border-white border-t-transparent animate-spin rounded-full" /> : <Save size={14} />}
+                      Update Profile
+                   </button>
+                </div>
+              </div>
+            )}
+
+            {activeSection === "privacy" && (
+              <div className="space-y-6">
+                <div className="p-8 border border-red-100 dark:border-red-900/30 bg-red-50/30 dark:bg-red-900/10 rounded-[40px] space-y-4">
+                   <div className="flex items-center gap-3 text-red-500">
+                      <Shield size={24} />
+                      <h3 className="text-xl font-display">Danger Zone</h3>
+                   </div>
+                   <p className="text-sm text-gray-500 font-medium leading-relaxed">
+                      Permanently delete your Skillo account and all associated data.
+                   </p>
+                   <button 
+                    onClick={handleDeleteAccount}
+                    disabled={isDeleting}
+                    className="flex items-center gap-2 px-8 py-4 bg-red-500 text-white rounded-[20px] font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-red-500/20 hover:bg-red-600 transition-all disabled:opacity-50"
+                   >
+                      {isDeleting ? "Deleting..." : "Delete Account"}
+                   </button>
+                </div>
+              </div>
+            )}
+
+            {(activeSection !== "profile" && activeSection !== "privacy") && (
+              <div className="py-20 flex flex-col items-center justify-center border-2 border-dashed border-gray-100 dark:border-gray-800 rounded-[48px] text-gray-300">
+                 <Terminal size={48} className="mb-4 opacity-20" />
+                 <p className="text-[10px] font-black uppercase tracking-[0.4em]">Feature Coming Soon</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
