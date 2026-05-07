@@ -26,6 +26,7 @@ export default function Home() {
 
   // Auth / loading
   const [userId, setUserId] = useState<string | null>(null);
+  const [userProfile, setUserProfile] = useState<any>(null);
   const [isAppLoading, setIsAppLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
 
@@ -89,7 +90,14 @@ export default function Home() {
     try {
       const r = await fetch(`${API_BASE}/api/user/${encodeURIComponent(id)}`);
       if (r.status === 404) { localStorage.removeItem("lifeos_user_id"); router.push("/login"); return; }
-      if (r.ok) { const d = await r.json(); if (d.total_focus_minutes) setTotalFocusMinutes(d.total_focus_minutes); }
+      if (r.ok) { 
+        const d = await r.json(); 
+        setUserProfile(d);
+        if (d.total_focus_minutes) setTotalFocusMinutes(d.total_focus_minutes); 
+        // Sync local storage for components that might still read from it
+        if (d.name) localStorage.setItem("lifeos_user_name", d.name);
+        if (d.picture) localStorage.setItem("lifeos_user_picture", d.picture);
+      }
     } catch { /* backend may be offline */ } finally { setIsAppLoading(false); }
   };
 
@@ -300,8 +308,10 @@ export default function Home() {
       <div className="absolute inset-0 z-10 flex flex-col">
         <DashboardLayout
           onNav={handleNav}
+          userProfile={userProfile}
           sidebarContent={
             <AppSidebar
+              userProfile={userProfile}
               focusProgress={focusProgress}
               totalFocusMinutes={totalFocusMinutes}
               isFocusActive={isFocusActive}
@@ -324,7 +334,7 @@ export default function Home() {
             ) : activeNav === "hub" ? (
               <SystemsHub onNav={handleNav} onAction={handleCommand} />
             ) : activeNav === "settings" ? (
-              <SettingsPanel />
+              <SettingsPanel onProfileUpdate={() => checkUser()} />
             ) : (
               <CenterPanel
                 chatHistory={chatHistory}

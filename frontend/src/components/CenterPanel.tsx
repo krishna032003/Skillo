@@ -32,10 +32,10 @@ const MD = {
 };
 
 const CARDS = [
-  { label: "AUTO_PLAN", desc: "Sync your Classroom & build a daily plan", icon: Calendar, action: "auto_schedule", cmd: "Auto-Schedule My Day", color: "bg-blue-50 text-[#0052FF] dark:bg-blue-900/30" },
-  { label: "STUDY_GUIDE", desc: "AI-driven prioritization for your materials", icon: BookOpen, action: "study_today", cmd: "What Should I Study Today", color: "bg-green-50 text-green-600 dark:bg-green-900/30" },
-  { label: "FOCUS_MODE", desc: "Start a distraction-free study session", icon: Zap, action: "focus", cmd: "", color: "bg-yellow-50 text-yellow-600 dark:bg-yellow-900/30" },
-  { label: "LIBRARY", desc: "Search your documents and notes", icon: Search, action: "materials", cmd: "", color: "bg-purple-50 text-purple-600 dark:bg-purple-900/30" },
+  { label: "Intelligent Planner", desc: "Sync & build daily schedule", icon: Calendar, action: "auto_schedule", cmd: "Auto-Schedule My Day", color: "indigo" },
+  { label: "Academic Insights", desc: "AI material prioritization", icon: BookOpen, action: "study_today", cmd: "What Should I Study Today", color: "emerald" },
+  { label: "Focus Protocol", desc: "Start deep study session", icon: Zap, action: "focus", cmd: "", color: "amber" },
+  { label: "Knowledge Base", desc: "Search documents & notes", icon: Search, action: "materials", cmd: "", color: "purple" },
 ];
 
 function EmptyWorkspace({ onAction, onOpenFocus, onOpenMaterials, assignmentsData, totalFocusMinutes }: any) {
@@ -45,53 +45,70 @@ function EmptyWorkspace({ onAction, onOpenFocus, onOpenMaterials, assignmentsDat
       {/* Hero Header */}
       <div className="space-y-4">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="font-display text-6xl leading-tight dark:text-white text-[#111827]">
-            Hello, <span className="text-[#0052FF]">Gaurav.</span> <br />
-            Ready to <span className="italic">start?</span>
+          <h1 className="font-display text-5xl leading-tight dark:text-white text-[#111827]">
+            Hello, <span className="bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">Gaurav.</span> <br />
+            Ready to <span className="italic opacity-80">optimize?</span>
           </h1>
-          <p className="text-gray-400 font-medium text-lg mt-4 max-w-xl leading-relaxed">
-            Your workspace is synced and ready. Use the commands below to plan your day or start a focus session.
+          <p className="text-gray-400 font-medium text-base mt-4 max-w-lg leading-relaxed">
+            Systems are calibrated and ready. Execute a protocol below to begin.
           </p>
         </motion.div>
       </div>
 
       {/* Quick Metrics */}
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-3 gap-5">
         {[
-          { label: "Tasks", val: assignmentsData.length || "0", sub: "CLASSROOM SYNCED", color: "text-[#0052FF]" },
-          { label: "Focus Time", val: `${totalFocusMinutes}M`, sub: "WEEKLY TOTAL", color: "text-green-600" },
-          { label: "Status", val: "ACTIVE", sub: "ALL SYSTEMS READY", color: "text-blue-500" },
+          { label: "Active Tasks", val: assignmentsData.length || "0", sub: "SYNCED", color: "text-indigo-500" },
+          { label: "Focus Duration", val: `${totalFocusMinutes}M`, sub: "WEEKLY", color: "text-emerald-500" },
+          { label: "Node Status", val: "ACTIVE", sub: "STABLE", color: "text-purple-500" },
         ].map((m, i) => (
-          <div key={i} className="p-6 border rounded-3xl shadow-sm hover:shadow-md transition-shadow dark:bg-gray-900 dark:border-gray-800 bg-white border-gray-100">
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{m.label}</p>
-            <p className={`text-3xl font-display uppercase tracking-tighter ${m.color}`}>{m.val}</p>
-            <p className="text-[9px] font-bold text-gray-300 uppercase tracking-widest mt-1">{m.sub}</p>
+          <div key={i} className="px-6 py-5 border rounded-2xl transition-all dark:bg-gray-900/50 dark:border-gray-800 bg-white border-gray-100 shadow-sm">
+            <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2">{m.label}</p>
+            <div className="flex items-baseline gap-2">
+              <p className={`text-2xl font-black tracking-tight ${m.color}`}>{m.val}</p>
+              <span className="text-[8px] font-bold text-gray-400 uppercase tracking-widest">{m.sub}</span>
+            </div>
           </div>
         ))}
       </div>
 
       {/* Protocol Cards */}
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-           <h3 className="text-xs font-bold text-gray-400 uppercase tracking-[0.3em]">Quick Actions</h3>
-           <div className="h-px flex-1 mx-6 dark:bg-gray-800 bg-gray-100" />
+      <div className="space-y-4">
+        <div className="flex items-center gap-4">
+           <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">System Protocols</h3>
+           <div className="h-[1px] flex-1 dark:bg-gray-800 bg-gray-100" />
         </div>
         <div className="grid grid-cols-2 gap-6">
-          {CARDS.map((c, i) => (
-            <button key={i} onClick={() => c.action === "focus" ? onOpenFocus() : c.action === "materials" ? onOpenMaterials() : onAction(c.action, c.cmd)}
-              className="group p-8 border rounded-[32px] text-left transition-all flex items-start gap-6 dark:bg-gray-900 dark:border-gray-800 hover:border-[#0052FF]/30 bg-white border-gray-100 hover:shadow-lg">
-              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${c.color}`}>
-                <c.icon size={24} />
-              </div>
-              <div className="flex-1 pt-1">
-                <div className="flex items-center justify-between mb-2">
-                   <h4 className="font-display text-xl uppercase tracking-tight dark:text-white text-[#111827]">{c.label}</h4>
-                   <ChevronRight size={16} className="text-gray-300 group-hover:text-[#0052FF] transition-colors" />
+          {CARDS.map((c, i) => {
+            const colorMap: any = {
+              indigo: { text: "text-indigo-500", bg: "bg-indigo-500/10", border: "border-indigo-500/20", glow: "hover:border-indigo-500/50 hover:shadow-indigo-500/10" },
+              emerald: { text: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/20", glow: "hover:border-emerald-500/50 hover:shadow-emerald-500/10" },
+              amber: { text: "text-amber-500", bg: "bg-amber-500/10", border: "border-amber-500/20", glow: "hover:border-amber-500/50 hover:shadow-amber-500/10" },
+              purple: { text: "text-purple-500", bg: "bg-purple-500/10", border: "border-purple-500/20", glow: "hover:border-purple-500/50 hover:shadow-purple-500/10" },
+            };
+            const theme = colorMap[c.color];
+            
+            return (
+              <motion.button
+                key={i}
+                whileHover={{ y: -2, scale: 1.01 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => c.action === "focus" ? onOpenFocus() : c.action === "materials" ? onOpenMaterials() : onAction(c.action, c.cmd)}
+                className={`group p-6 border rounded-3xl text-left transition-all duration-500 flex items-center gap-5 dark:bg-gray-900/40 bg-white shadow-sm hover:shadow-lg ${theme.border} ${theme.glow}`}
+              >
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-500 ${theme.bg} ${theme.text} group-hover:scale-110 shadow-inner`}>
+                  <c.icon size={22} />
                 </div>
-                <p className="text-sm text-gray-400 leading-relaxed font-medium">{c.desc}</p>
-              </div>
-            </button>
-          ))}
+                <div className="flex-1 min-w-0">
+                   <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-display font-bold tracking-tight dark:text-gray-100 text-gray-800 transition-colors duration-300 group-hover:text-indigo-500">{c.label}</h4>
+                      <ChevronRight size={16} className={`transition-all duration-500 text-gray-300 group-hover:text-indigo-500 group-hover:translate-x-1`} />
+                   </div>
+                   <p className="text-[11px] text-gray-400 truncate mt-1 font-medium">{c.desc}</p>
+                </div>
+              </motion.button>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -119,14 +136,15 @@ export default function CenterPanel({
           {/* Final Insight */}
           <AnimatePresence>
             {finalAnswer && (
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="p-10 border rounded-[40px] dark:bg-blue-900/20 dark:border-blue-900/30 bg-blue-50/50 border-blue-100">
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="p-8 border rounded-3xl dark:bg-gray-900/40 dark:border-gray-800 bg-white border-gray-100 shadow-sm relative overflow-hidden group">
+                <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-indigo-500 via-[#0052FF] to-purple-500" />
                 <div className="flex items-center gap-3 mb-6">
-                   <div className="w-8 h-8 rounded-lg bg-[#0052FF] flex items-center justify-center text-white">
+                   <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 via-[#0052FF] to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
                       <Sparkles size={16} />
                    </div>
-                   <span className="text-xs font-bold uppercase tracking-widest text-[#0052FF]">AI Summary</span>
+                   <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500">Neural Synthesis</span>
                 </div>
-                <div className="prose prose-sm max-w-none">
+                <div className="prose prose-sm max-w-none relative z-10">
                   <ReactMarkdown remarkPlugins={[remarkGfm]} components={MD}>{finalAnswer}</ReactMarkdown>
                 </div>
               </motion.div>
@@ -137,13 +155,13 @@ export default function CenterPanel({
           <div className="space-y-10">
             {chatHistory.map(msg => (
               <div key={msg.id} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[80%] flex gap-4 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
-                   <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 ${msg.role === "user" ? "dark:bg-gray-800 bg-gray-100 text-gray-500" : "bg-blue-100 dark:bg-blue-900/30 text-[#0052FF]"}`}>
-                      {msg.role === "user" ? <User size={18} /> : <Sparkles size={18} />}
+                <div className={`max-w-[85%] flex gap-4 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
+                   <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-sm ${msg.role === "user" ? "dark:bg-gray-800 bg-gray-100 text-gray-500" : "bg-gradient-to-br from-indigo-600 via-[#0052FF] to-purple-600 text-white"}`}>
+                      {msg.role === "user" ? <User size={16} /> : <Sparkles size={16} />}
                    </div>
-                   <div className={`p-6 rounded-[28px] ${msg.role === "user" ? "dark:bg-gray-800 dark:text-gray-300 bg-gray-50 text-gray-700" : "dark:bg-gray-900 dark:border-gray-800 bg-white border border-gray-100 dark:text-gray-400 text-gray-600"}`}>
+                   <div className={`p-5 rounded-2xl shadow-sm leading-relaxed text-sm ${msg.role === "user" ? "dark:bg-gray-800 dark:text-gray-300 bg-gray-50 text-gray-700" : "dark:bg-gray-900 dark:border-gray-800 bg-white border border-gray-100 dark:text-gray-300 text-gray-600"}`}>
                       {msg.role === "ai" && !msg.text
-                        ? <div className="flex items-center gap-3"><Loader2 className="animate-spin text-[#0052FF]" size={14} /><span className="text-xs font-bold text-[#0052FF] uppercase tracking-widest">Thinking...</span></div>
+                        ? <div className="flex items-center gap-3"><Loader2 className="animate-spin text-indigo-500" size={14} /><span className="text-[10px] font-black text-indigo-500 uppercase tracking-widest">Neural Processing...</span></div>
                         : <ReactMarkdown remarkPlugins={[remarkGfm]} components={MD}>{msg.text}</ReactMarkdown>
                       }
                    </div>
@@ -168,8 +186,8 @@ export default function CenterPanel({
             className="w-full border rounded-[32px] pl-8 pr-20 py-6 outline-none transition-all text-sm font-medium placeholder-gray-300 shadow-sm dark:bg-gray-900 dark:border-gray-800 dark:text-white dark:focus:border-blue-500/50 dark:focus:bg-gray-800 bg-gray-50 border-gray-200 focus:border-[#0052FF]/30 focus:bg-white text-gray-900 dark:text-white"
           />
           <button type="submit" disabled={isThinking || !chatInput.trim()}
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-[#0052FF] text-white rounded-full flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-lg disabled:opacity-20">
-            {isThinking ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
+            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-gradient-to-br from-indigo-600 via-[#0052FF] to-purple-600 text-white rounded-full flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-xl shadow-indigo-500/20 disabled:opacity-20 group">
+            {isThinking ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />}
           </button>
         </form>
         <div className="flex justify-center items-center gap-8 mt-6">

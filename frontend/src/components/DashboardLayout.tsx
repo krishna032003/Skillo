@@ -11,6 +11,7 @@ import Image from "next/image";
 interface LogEntry { id: string; agent: string; message: string; timestamp: string; status: string; }
 
 interface DashboardLayoutProps {
+  userProfile: any;
   sidebarContent: React.ReactNode;
   centralArea: React.ReactNode;
   logs: LogEntry[];
@@ -19,7 +20,7 @@ interface DashboardLayoutProps {
 }
 
 export default function DashboardLayout({
-  sidebarContent, centralArea, logs, pipelineStatus, onNav
+  userProfile, sidebarContent, centralArea, logs, pipelineStatus, onNav
 }: DashboardLayoutProps) {
   const [mounted, setMounted] = useState(false);
   const [showMonitor, setShowMonitor] = useState(true);
@@ -58,14 +59,9 @@ export default function DashboardLayout({
       <main className="flex-1 flex flex-col relative overflow-hidden">
         
         {/* ── Top Navigation Bar ── */}
-        <header className={`h-16 px-10 flex items-center justify-between border-b z-20 shadow-sm shrink-0 transition-colors ${isDarkMode ? 'bg-[#111112] border-gray-800' : 'bg-white border-gray-200'}`}>
+        <header className={`h-16 px-10 flex items-center justify-between border-b z-20 transition-all duration-500 ${isDarkMode ? 'bg-[#111112]/80 border-gray-800/50 backdrop-blur-xl' : 'bg-white/80 border-gray-200/50 backdrop-blur-xl'}`}>
           <div className="flex items-center gap-10">
-            <div className="flex items-center gap-3 cursor-pointer" onClick={() => onNav('command')}>
-              <div className="w-8 h-8 rounded-lg bg-[#0052FF] flex items-center justify-center text-white font-black text-xl">S</div>
-              <span className={`font-display text-xl tracking-tight uppercase ${isDarkMode ? 'text-white' : 'text-[#111827]'}`}>Skillo<span className="text-[#0052FF]">.</span></span>
-            </div>
-            
-            <div className="hidden md:flex items-center gap-6">
+            <div className="hidden md:flex items-center gap-8">
               {[
                 { id: "command", label: "Dashboard" },
                 { id: "hub", label: "Explore Hub" },
@@ -74,7 +70,7 @@ export default function DashboardLayout({
                 <button 
                   key={t.id} 
                   onClick={() => onNav(t.id)}
-                  className={`text-[10px] font-bold uppercase tracking-[0.2em] transition-colors ${isDarkMode ? 'text-gray-500 hover:text-white' : 'text-gray-400 hover:text-[#0052FF]'}`}
+                  className={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors ${isDarkMode ? 'text-gray-500 hover:text-white' : 'text-gray-400 hover:text-indigo-500'}`}
                 >
                   {t.label}
                 </button>
@@ -98,13 +94,13 @@ export default function DashboardLayout({
             </button>
 
             <div className="flex items-center gap-4 text-gray-400">
-               <Bell size={18} className="hover:text-[#0052FF] cursor-pointer transition-colors" />
-               <Settings size={18} className="hover:text-[#0052FF] cursor-pointer transition-colors" onClick={() => onNav('settings')} />
+               <Bell size={18} className="hover:text-indigo-500 cursor-pointer transition-colors" />
+               <Settings size={18} className="hover:text-indigo-500 cursor-pointer transition-colors" onClick={() => onNav('settings')} />
                <div className={`w-8 h-8 rounded-full border overflow-hidden relative cursor-pointer ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-100 border-gray-200'}`} onClick={() => onNav('settings')}>
-                  {localStorage.getItem("lifeos_user_picture") ? (
-                    <img src={localStorage.getItem("lifeos_user_picture")!} alt="avatar" className="w-full h-full object-cover" />
+                  {userProfile?.picture || localStorage.getItem("lifeos_user_picture") ? (
+                    <img src={userProfile?.picture || localStorage.getItem("lifeos_user_picture")!} alt="avatar" className="w-full h-full object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-blue-50 dark:bg-blue-900/30 text-[#0052FF] text-[10px] font-black uppercase">
+                    <div className="w-full h-full flex items-center justify-center bg-indigo-50 dark:bg-indigo-900/30 text-indigo-500 text-[10px] font-black uppercase">
                        {localStorage.getItem("lifeos_user_name")?.slice(0, 2).toUpperCase() || "GY"}
                     </div>
                   )}
@@ -133,7 +129,7 @@ export default function DashboardLayout({
                 {/* Header */}
                 <div className={`p-6 border-b flex items-center justify-between transition-colors ${isDarkMode ? 'bg-gray-900/50 border-gray-800' : 'bg-gray-50/50 border-gray-200'}`}>
                   <div className="flex items-center gap-3">
-                    <Activity size={14} className="text-[#0052FF]" />
+                    <Activity size={14} className="text-indigo-500" />
                     <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${isDarkMode ? 'text-gray-400' : 'text-[#111827]'}`}>Activity Log</span>
                   </div>
                   <div className="flex gap-1.5">
@@ -146,9 +142,9 @@ export default function DashboardLayout({
                   {logs.map((log, i) => (
                     <motion.div key={log.id || i} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}
                       className="flex gap-3 items-start group">
-                      <div className="mt-1.5 w-1 h-1 rounded-full bg-[#0052FF] group-hover:scale-150 transition-transform shrink-0" />
+                      <div className="mt-1.5 w-1 h-1 rounded-full bg-indigo-500 group-hover:scale-150 transition-transform shrink-0" />
                       <p className={`text-[11px] font-mono leading-relaxed break-words font-medium ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
-                        <span className="text-[#0052FF]/50 uppercase mr-1">[{log.timestamp || 'SYNCING'}]</span> 
+                        <span className="text-indigo-500/50 uppercase mr-1">[{log.timestamp || 'SYNCING'}]</span> 
                         <span className={`font-bold mr-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>{log.agent}:</span>
                         {log.message}
                       </p>

@@ -23,50 +23,54 @@ export default function WeeklyReviewModal({ isOpen, onClose, isLoading, data }: 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md"
+                    className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-md"
                 >
                     <motion.div
-                        initial={{ scale: 0.95, y: 20 }}
+                        initial={{ scale: 0.98, y: 10 }}
                         animate={{ scale: 1, y: 0 }}
-                        exit={{ scale: 0.95, y: 20 }}
-                        className="w-full max-w-lg rounded-[40px] overflow-hidden shadow-2xl relative transition-colors dark:bg-[#111112] dark:border dark:border-gray-800 bg-white"
+                        exit={{ scale: 0.98, y: 10 }}
+                        className="w-full max-w-lg rounded-[32px] overflow-hidden shadow-2xl relative transition-colors dark:bg-[#0A0A0B] dark:border dark:border-gray-800 bg-white"
                     >
                         <button
                             onClick={onClose}
-                            className="absolute top-6 right-6 text-gray-400 hover:text-[#0052FF] transition-colors z-10"
+                            className="absolute top-6 right-6 text-gray-400 hover:text-indigo-500 transition-colors z-10"
                         >
-                            <X size={24} />
+                            <X size={20} />
                         </button>
 
                         <div className="p-10">
                             <div className="text-center mb-10">
-                                <h2 className="text-3xl font-display tracking-tight mb-2 dark:text-white text-[#111827]">Weekly AI Review</h2>
-                                <p className="text-gray-400 text-sm font-medium uppercase tracking-widest">Deep scanning your productivity metrics</p>
+                                <h2 className="text-3xl font-display tracking-tight mb-2 dark:text-white text-[#111827]">Neural Summary<span className="text-indigo-500">.</span></h2>
+                                <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.3em]">Synthesizing productivity architecture</p>
                             </div>
 
                             {isLoading ? (
                                 <div className="flex flex-col items-center justify-center py-16 gap-8">
-                                    <motion.div
-                                        animate={{
-                                            scale: [1, 1.1, 1],
-                                            rotate: [0, 180, 360],
-                                        }}
-                                        transition={{
-                                            duration: 2,
-                                            repeat: Infinity,
-                                            ease: "linear"
-                                        }}
-                                        className="w-16 h-16 rounded-2xl border-2 border-blue-100 border-t-[#0052FF]"
-                                    />
+                                    <div className="relative">
+                                        <motion.div
+                                            animate={{
+                                                rotate: [0, 360],
+                                            }}
+                                            transition={{
+                                                duration: 4,
+                                                repeat: Infinity,
+                                                ease: "linear"
+                                            }}
+                                            className="w-20 h-20 rounded-full border-2 border-indigo-500/10 border-t-indigo-500"
+                                        />
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            <Brain size={24} className="text-indigo-500 opacity-20" />
+                                        </div>
+                                    </div>
                                     <div className="space-y-3 text-center">
                                         <motion.p
                                             animate={{ opacity: [0.5, 1, 0.5] }}
                                             transition={{ duration: 1.5, repeat: Infinity }}
-                                            className="text-[#0052FF] font-black tracking-[0.2em] text-xs uppercase"
+                                            className="text-indigo-500 font-black tracking-[0.3em] text-[10px] uppercase"
                                         >
-                                            Synthesizing Cognitive Logs
+                                            Deep Scanning Nodes
                                         </motion.p>
-                                        <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">Cross-referencing goals with performance data</p>
+                                        <p className="text-gray-400 text-[8px] font-black uppercase tracking-[0.2em] opacity-60">Calibrating performance metrics</p>
                                     </div>
                                 </div>
                             ) : data ? (
@@ -76,70 +80,71 @@ export default function WeeklyReviewModal({ isOpen, onClose, isLoading, data }: 
                                     className="space-y-8"
                                 >
                                     <div className="flex justify-center">
-                                        <div className="relative flex items-center justify-center">
-                                            <svg className="w-40 h-40 transform -rotate-90">
+                                        <div className="relative flex items-center justify-center group">
+                                            <div className="absolute inset-0 bg-indigo-500/5 rounded-full blur-2xl group-hover:bg-indigo-500/10 transition-colors" />
+                                            <svg className="w-44 h-44 transform -rotate-90 relative z-10" viewBox="0 0 176 176">
                                                 <circle
-                                                    cx="80"
-                                                    cy="80"
-                                                    r="70"
+                                                    cx="88"
+                                                    cy="88"
+                                                    r="76"
                                                     className="stroke-gray-100 dark:stroke-gray-800 fill-none"
-                                                    strokeWidth="12"
+                                                    strokeWidth="10"
                                                 />
                                                 <motion.circle
-                                                    cx="80"
-                                                    cy="80"
-                                                    r="70"
-                                                    className="stroke-[#0052FF] fill-none"
-                                                    strokeWidth="12"
-                                                    strokeDasharray={439.8}
-                                                    initial={{ strokeDashoffset: 439.8 }}
-                                                    animate={{ strokeDashoffset: 439.8 - (439.8 * data.score) / 100 }}
-                                                    transition={{ duration: 1.5, ease: "easeOut" }}
+                                                    cx="88"
+                                                    cy="88"
+                                                    r="76"
+                                                    className="stroke-indigo-500 fill-none"
+                                                    strokeWidth="10"
+                                                    strokeDasharray={477.5}
+                                                    initial={{ strokeDashoffset: 477.5 }}
+                                                    animate={{ strokeDashoffset: 477.5 - (477.5 * data.score) / 100 }}
+                                                    transition={{ duration: 2, ease: "circOut" }}
                                                     strokeLinecap="round"
                                                 />
                                             </svg>
-                                            <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                                <span className="text-5xl font-display dark:text-white text-[#111827]">{data.score}</span>
-                                                <span className="text-[10px] text-gray-400 font-black uppercase tracking-widest mt-1">Health Score</span>
+                                            <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
+                                                <span className="text-5xl font-display font-bold dark:text-white text-[#111827]">{data.score}</span>
+                                                <span className="text-[10px] text-indigo-500 font-black uppercase tracking-widest mt-1">Health Index</span>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-5">
+                                    <div className="space-y-4">
                                         <motion.div
-                                            initial={{ opacity: 0, x: -20 }}
+                                            initial={{ opacity: 0, x: -10 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             transition={{ delay: 0.2 }}
-                                            className="p-6 rounded-[32px] border dark:bg-gray-800/50 dark:border-gray-800 bg-gray-50 border-gray-100"
+                                            className="p-6 rounded-3xl border dark:bg-gray-900/40 dark:border-gray-800 bg-gray-50 border-gray-100"
                                         >
                                             <div className="flex items-center gap-3 mb-3">
-                                                <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-[#0052FF]">
-                                                   <Activity size={18} />
+                                                <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-500">
+                                                   <Activity size={16} />
                                                 </div>
-                                                <h4 className="text-xs font-black uppercase tracking-widest dark:text-white text-[#111827]">Analysis</h4>
+                                                <h4 className="text-[10px] font-black uppercase tracking-[0.2em] dark:text-gray-300 text-gray-500">Neural Analysis</h4>
                                             </div>
                                             <p className="text-sm dark:text-gray-400 text-gray-600 leading-relaxed font-medium">{data.review}</p>
                                         </motion.div>
 
                                         <motion.div
-                                            initial={{ opacity: 0, x: -20 }}
+                                            initial={{ opacity: 0, x: -10 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             transition={{ delay: 0.4 }}
-                                            className="p-6 rounded-[32px] border dark:bg-blue-900/20 dark:border-blue-900/30 bg-blue-50 border-blue-100"
+                                            className="p-6 rounded-3xl border dark:bg-indigo-500/10 dark:border-indigo-500/20 bg-indigo-50 border-indigo-100"
                                         >
                                             <div className="flex items-center gap-3 mb-3">
-                                                <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-[#0052FF]">
-                                                   <Zap size={18} />
+                                                <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-500">
+                                                   <Zap size={16} />
                                                 </div>
-                                                <h4 className="text-xs font-black uppercase tracking-widest text-[#0052FF]">Action Item</h4>
+                                                <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-600">Protocol Optimization</h4>
                                             </div>
-                                            <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-medium">{data.recommendation}</p>
+                                            <p className="text-sm text-indigo-700 dark:text-indigo-300 leading-relaxed font-medium">{data.recommendation}</p>
                                         </motion.div>
                                     </div>
                                 </motion.div>
                             ) : (
-                                <div className="text-center py-16 text-gray-400 font-medium uppercase tracking-widest text-xs">
-                                    Data retrieval failed. Please try again.
+                                <div className="text-center py-16 text-gray-400 font-black uppercase tracking-[0.3em] text-[10px] opacity-40">
+                                    Synchronization Error // Try Again
                                 </div>
                             )}
                         </div>
@@ -149,3 +154,27 @@ export default function WeeklyReviewModal({ isOpen, onClose, isLoading, data }: 
         </AnimatePresence>
     );
 }
+
+const Brain = ({ size, className }: { size: number; className?: string }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    <path d="M12 4.5V10" />
+    <path d="M12 14v5.5" />
+    <path d="M4.5 12H10" />
+    <path d="M14 12h5.5" />
+    <circle cx="12" cy="12" r="3" />
+    <path d="m18.4 5.6-2.8 2.8" />
+    <path d="m8.4 15.6-2.8 2.8" />
+    <path d="m5.6 5.6 2.8 2.8" />
+    <path d="m15.6 15.6 2.8 2.8" />
+  </svg>
+);

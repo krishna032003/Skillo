@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "LifeOS - Student Command Center",
+  title: "Skillo - AI Command Center",
   description: "AI-powered student productivity OS for study planning, scheduling, and focus.",
 };
 

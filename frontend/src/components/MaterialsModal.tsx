@@ -16,17 +16,17 @@ const ACTIONS = [
 ];
 
 const md:Record<string,React.FC<React.ComponentPropsWithoutRef<'code'>&{className?:string}>> = {
-  h1:({...p})=><h1 className="text-sm font-bold text-white mt-3 mb-1.5" {...p}/>,
-  h2:({...p})=><h2 className="text-xs font-bold text-white/90 mt-3 mb-1" {...p}/>,
-  p:({...p})=><p className="mb-2 leading-relaxed text-white/65 text-xs" {...p}/>,
-  ul:({...p})=><ul className="list-disc pl-4 mb-3 text-white/70 text-xs space-y-1.5" {...p}/>,
-  ol:({...p})=><ol className="list-decimal pl-4 mb-3 text-white/70 text-xs space-y-1.5" {...p}/>,
+  h1:({...p})=><h1 className="text-sm font-display font-bold dark:text-white text-gray-800 mt-4 mb-2" {...p}/>,
+  h2:({...p})=><h2 className="text-xs font-display font-bold dark:text-white/90 text-gray-700 mt-4 mb-1.5" {...p}/>,
+  p:({...p})=><p className="mb-3 leading-relaxed dark:text-gray-400 text-gray-600 text-xs font-medium" {...p}/>,
+  ul:({...p})=><ul className="list-disc pl-5 mb-4 dark:text-gray-400 text-gray-600 text-xs space-y-2" {...p}/>,
+  ol:({...p})=><ol className="list-decimal pl-5 mb-4 dark:text-gray-400 text-gray-600 text-xs space-y-2" {...p}/>,
   li:({...p})=><li className="leading-relaxed" {...p}/>,
-  strong:({...p})=><strong className="font-semibold text-white/90" {...p}/>,
+  strong:({...p})=><strong className="font-bold text-indigo-500" {...p}/>,
   code:({className,children,...p})=>{
     const b=/language-(\w+)/.exec(className||'');
-    return b?<pre className="bg-black/50 p-2 rounded-lg text-[10px] font-mono my-2 border border-white/8 overflow-x-auto"><code className={className} {...p}>{children}</code></pre>
-      :<code className="bg-white/8 px-1 rounded text-[10px] text-emerald-400 font-mono" {...p}>{children}</code>;
+    return b?<pre className="dark:bg-gray-900 bg-gray-50 p-3 rounded-xl text-[10px] font-mono my-3 border dark:border-gray-800 border-gray-100 overflow-x-auto"><code className={className} {...p}>{children}</code></pre>
+      :<code className="dark:bg-indigo-500/10 bg-indigo-50 px-1.5 py-0.5 rounded text-[10px] text-indigo-500 font-mono" {...p}>{children}</code>;
   },
 };
 
@@ -233,18 +233,18 @@ export default function MaterialsModal({isOpen,onClose,userId}:{isOpen:boolean;o
   const courseData=activeCourse?courses.find(c=>c.courseId===activeCourse):null;
 
   return(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <motion.div initial={{opacity:0,scale:0.96}} animate={{opacity:1,scale:1}}
-        className="relative w-full max-w-4xl bg-[#0c0d10] border border-white/8 rounded-2xl shadow-2xl flex flex-col max-h-[88vh] overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-md">
+      <motion.div initial={{opacity:0,scale:0.98}} animate={{opacity:1,scale:1}}
+        className="relative w-full max-w-4xl dark:bg-[#0c0d10] bg-white border dark:border-gray-800 border-gray-100 rounded-[32px] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transition-colors">
 
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/5 shrink-0">
-          <div className="flex items-center gap-2">
-            <Brain size={15} className="text-emerald-400"/>
-            <h2 className="text-[13px] font-bold text-white">Study RAG</h2>
-            {selected.size>0&&<span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-400/15 text-emerald-400">{selected.size} selected</span>}
+        <div className="flex items-center justify-between px-8 py-5 border-b dark:border-gray-800 border-gray-100 shrink-0">
+          <div className="flex items-center gap-3">
+            <Brain size={18} className="text-indigo-500"/>
+            <h2 className="text-sm font-display font-bold dark:text-white text-gray-800">Learning Architecture</h2>
+            {selected.size>0&&<span className="text-[10px] px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-500 font-bold border border-indigo-500/20">{selected.size} active nodes</span>}
           </div>
-          <button onClick={onClose} className="text-white/30 hover:text-white transition-colors"><X size={15}/></button>
+          <button onClick={onClose} className="text-gray-400 hover:text-indigo-500 transition-colors"><X size={18}/></button>
         </div>
 
         {/* Content */}
@@ -252,25 +252,29 @@ export default function MaterialsModal({isOpen,onClose,userId}:{isOpen:boolean;o
 
           {/* STEP: SOURCE SELECTION */}
           {step==="source"&&(
-            <div className="space-y-4">
-              <p className="text-[10px] text-white/30 uppercase tracking-wider font-semibold">Choose Source</p>
-              <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-6">
+              <p className="text-[10px] text-gray-400 uppercase tracking-[0.3em] font-black">Choose Data Protocol</p>
+              <div className="grid grid-cols-2 gap-5">
                 <button onClick={()=>{setStep("classroom");fetchClassroomMaterials();}}
-                  className="p-5 rounded-xl border border-white/8 bg-white/3 hover:bg-white/6 hover:border-emerald-400/30 transition-all text-left group">
-                  <GraduationCap size={20} className="text-emerald-400/70 mb-2 group-hover:text-emerald-400"/>
-                  <p className="text-xs font-semibold text-white/80">Google Classroom</p>
-                  <p className="text-[10px] text-white/30 mt-1">Import materials from your courses</p>
+                  className="p-6 rounded-[24px] border dark:border-gray-800 border-gray-100 dark:bg-gray-900/40 bg-white hover:border-indigo-500/40 hover:shadow-xl transition-all text-left group">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 mb-4 group-hover:scale-110 transition-transform">
+                    <GraduationCap size={20} />
+                  </div>
+                  <p className="text-sm font-display font-bold dark:text-white text-gray-800">Classroom Sync</p>
+                  <p className="text-[11px] text-gray-400 mt-1 font-medium">Sync materials from external courses</p>
                 </button>
                 <button onClick={()=>setStep("manual")}
-                  className="p-5 rounded-xl border border-white/8 bg-white/3 hover:bg-white/6 hover:border-violet-400/30 transition-all text-left group">
-                  <PenLine size={20} className="text-violet-400/70 mb-2 group-hover:text-violet-400"/>
-                  <p className="text-xs font-semibold text-white/80">Manual Notes</p>
-                  <p className="text-[10px] text-white/30 mt-1">Paste your own study text</p>
+                  className="p-6 rounded-[24px] border dark:border-gray-800 border-gray-100 dark:bg-gray-900/40 bg-white hover:border-purple-500/40 hover:shadow-xl transition-all text-left group">
+                  <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-500 mb-4 group-hover:scale-110 transition-transform">
+                    <PenLine size={20} />
+                  </div>
+                  <p className="text-sm font-display font-bold dark:text-white text-gray-800">Manual Archive</p>
+                  <p className="text-[11px] text-gray-400 mt-1 font-medium">Inject raw text or personal notes</p>
                 </button>
               </div>
               {materials.length>0&&(
-                <button onClick={()=>setStep("browse")} className="w-full py-2 bg-white/4 border border-white/8 rounded-lg text-[10px] text-white/40 hover:text-white/70 transition-colors">
-                  View {materials.length} saved material{materials.length>1?"s":""} →
+                <button onClick={()=>setStep("browse")} className="w-full py-3 dark:bg-gray-900/50 bg-gray-50 border dark:border-gray-800 border-gray-100 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-indigo-500 transition-colors">
+                  View {materials.length} stored module{materials.length>1?"s":""} →
                 </button>
               )}
             </div>
@@ -334,15 +338,20 @@ export default function MaterialsModal({isOpen,onClose,userId}:{isOpen:boolean;o
 
               {/* Course list */}
               {!activeCourse&&courses.length>0&&(
-                <div className="grid grid-cols-1 gap-2">
+                <div className="grid grid-cols-1 gap-3">
                   {courses.map(c=>(
                     <button key={c.courseId} onClick={()=>{setActiveCourse(c.courseId);setClassroomSelected(new Set());}}
-                      className="flex items-center justify-between p-3 rounded-xl border border-white/8 bg-white/3 hover:bg-white/6 hover:border-white/15 transition-all text-left">
-                      <div>
-                        <p className="text-xs font-medium text-white/80">{c.courseName}</p>
-                        <p className="text-[10px] text-white/30">{c.materials.length} material{c.materials.length!==1?"s":""}{c.section?` · ${c.section}`:""}</p>
+                      className="flex items-center justify-between p-4 rounded-2xl border dark:border-gray-800 border-gray-100 dark:bg-gray-900/40 bg-white hover:border-indigo-500/30 hover:bg-indigo-500/5 transition-all text-left group">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500">
+                           <GraduationCap size={18} />
+                        </div>
+                        <div>
+                          <p className="text-sm font-display font-bold dark:text-white text-gray-800">{c.courseName}</p>
+                          <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">{c.materials.length} node{c.materials.length!==1?"s":""}{c.section?` · ${c.section}`:""}</p>
+                        </div>
                       </div>
-                      <ChevronRight size={12} className="text-white/20"/>
+                      <ChevronRight size={14} className="text-gray-300 group-hover:text-indigo-500 group-hover:translate-x-1 transition-all"/>
                     </button>
                   ))}
                 </div>
@@ -357,31 +366,30 @@ export default function MaterialsModal({isOpen,onClose,userId}:{isOpen:boolean;o
                   </div>
 
                   {courseData.materials.length===0?(
-                    <p className="text-[10px] text-white/30 py-8 text-center">No materials found in this course</p>
+                    <p className="text-[10px] text-gray-400 py-12 text-center uppercase tracking-widest font-bold">No active nodes found in course</p>
                   ):(
                     <>
-                      <div className="space-y-1.5">
+                      <div className="space-y-2">
                         {courseData.materials.map((m,i)=>(
                           <div key={i} onClick={()=>toggleCm(i)}
-                            className={`flex items-start gap-2.5 p-2.5 rounded-lg border cursor-pointer transition-all ${classroomSelected.has(i)?"border-emerald-400/40 bg-emerald-400/5":"border-white/6 bg-white/2 hover:bg-white/4"}`}>
-                            {classroomSelected.has(i)?<CheckSquare size={13} className="text-emerald-400 mt-0.5 shrink-0"/>:<Square size={13} className="text-white/20 mt-0.5 shrink-0"/>}
+                            className={`flex items-start gap-3.5 p-4 rounded-2xl border cursor-pointer transition-all ${classroomSelected.has(i)?"border-indigo-500/40 bg-indigo-500/5":"dark:border-gray-800 border-gray-100 dark:bg-gray-900/40 bg-white hover:bg-gray-50 dark:hover:bg-gray-800/60"}`}>
+                            {classroomSelected.has(i)?<CheckSquare size={16} className="text-indigo-500 shrink-0"/>:<Square size={16} className="text-gray-300 shrink-0"/>}
                             <div className="flex-1 min-w-0">
-                              <p className="text-[11px] text-white/75 font-medium truncate">{m.title}</p>
-                              <div className="flex flex-wrap items-center gap-1.5 mt-0.5">
-                                <span className="text-[9px] text-white/25 px-1.5 py-px rounded bg-white/5">{m.type}</span>
-                                {m.content_type&&m.content_type!=="unknown"&&<span className="text-[9px] text-emerald-400/70">{m.content_type}</span>}
-                                {m.topicName&&<span className="text-[9px] text-white/40 border border-white/10 px-1 rounded truncate max-w-[100px]">{m.topicName}</span>}
-                                {!m.topicName&&m.parentTitle&&<span className="text-[9px] text-white/20 truncate">{m.parentTitle}</span>}
+                              <p className="text-sm dark:text-gray-200 text-gray-800 font-bold truncate font-display">{m.title}</p>
+                              <div className="flex flex-wrap items-center gap-2 mt-1.5">
+                                <span className="text-[9px] text-gray-400 font-black uppercase tracking-widest px-2 py-0.5 rounded-lg bg-gray-100 dark:bg-gray-800">{m.type}</span>
+                                {m.content_type&&m.content_type!=="unknown"&&<span className="text-[9px] text-indigo-500 font-black uppercase tracking-widest">{m.content_type}</span>}
+                                {m.topicName&&<span className="text-[9px] text-gray-400 font-bold border dark:border-gray-700 border-gray-200 px-2 py-0.5 rounded-lg truncate max-w-[120px]">{m.topicName}</span>}
                               </div>
                             </div>
-                            {m.alternateLink&&<a href={m.alternateLink} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} className="text-white/20 hover:text-emerald-400 shrink-0"><ExternalLink size={11}/></a>}
+                            {m.alternateLink&&<a href={m.alternateLink} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} className="text-gray-300 hover:text-indigo-500 shrink-0 transition-colors"><ExternalLink size={14}/></a>}
                           </div>
                         ))}
                       </div>
-                      <div className="flex gap-2">
+                      <div className="flex gap-3">
                         <button onClick={handleImportSelected} disabled={classroomSelected.size===0||importing}
-                          className="flex-1 py-2.5 bg-emerald-400/15 border border-emerald-400/25 text-emerald-400 text-xs font-medium rounded-xl hover:bg-emerald-400/20 disabled:opacity-40 transition-colors">
-                          {importing?"Importing…":`Import ${classroomSelected.size} Selected`}
+                          className="flex-1 py-3.5 bg-indigo-500 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-indigo-600 shadow-lg shadow-indigo-500/20 disabled:opacity-40 transition-all">
+                          {importing?"Synchronizing…":`Import ${classroomSelected.size} Selected Nodes`}
                         </button>
                       </div>
                       <p className="text-[9px] text-white/20 leading-relaxed">Imported materials will be metadata-only. Click Auto-Extract in the Saved Materials view to enable AI analysis.</p>
@@ -415,14 +423,16 @@ export default function MaterialsModal({isOpen,onClose,userId}:{isOpen:boolean;o
                 <button onClick={()=>setStep("source")} className="text-white/30 hover:text-white/60"><ChevronLeft size={14}/></button>
                 <p className="text-[10px] text-white/30 uppercase tracking-wider font-semibold">Add Manual Notes</p>
               </div>
-              <input value={noteTitle} onChange={e=>setNoteTitle(e.target.value)} placeholder="Title (e.g., Chapter 4 — Deadlocks)"
-                className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-xs text-white placeholder-white/20 focus:outline-none focus:border-emerald-400/40"/>
-              <textarea value={noteContent} onChange={e=>setNoteContent(e.target.value)} placeholder="Paste notes, lecture text, or article…"
-                className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-xs text-white placeholder-white/20 focus:outline-none focus:border-emerald-400/40 h-40 resize-none"/>
-              <button onClick={handleSaveManual} disabled={saving||!noteTitle||!noteContent}
-                className="w-full py-2.5 bg-emerald-400 text-black text-xs font-bold rounded-xl hover:bg-emerald-300 disabled:opacity-40 transition-colors flex items-center justify-center gap-2">
-                <Plus size={13}/>{saving?"Saving…":"Save Material"}
-              </button>
+              <div className="space-y-4">
+                <input value={noteTitle} onChange={e=>setNoteTitle(e.target.value)} placeholder="Node Title (e.g., Quantum Mechanics — Ch. 4)"
+                  className="w-full dark:bg-gray-900 bg-gray-50 border dark:border-gray-800 border-gray-100 rounded-2xl px-5 py-4 text-sm font-bold dark:text-white text-gray-800 placeholder-gray-400 focus:outline-none focus:border-indigo-500/50 transition-all"/>
+                <textarea value={noteContent} onChange={e=>setNoteContent(e.target.value)} placeholder="Inject raw research data or personal study notes here…"
+                  className="w-full dark:bg-gray-900 bg-gray-50 border dark:border-gray-800 border-gray-100 rounded-2xl px-5 py-4 text-sm font-medium dark:text-gray-300 text-gray-600 placeholder-gray-400 focus:outline-none focus:border-indigo-500/50 h-56 resize-none transition-all styled-scrollbar"/>
+                <button onClick={handleSaveManual} disabled={saving||!noteTitle||!noteContent}
+                  className="w-full py-4 bg-indigo-500 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-indigo-600 shadow-lg shadow-indigo-500/20 disabled:opacity-40 transition-all flex items-center justify-center gap-2">
+                  <Plus size={14}/>{saving?"Archiving…":"Inject Material"}
+                </button>
+              </div>
             </div>
           )}
 
@@ -561,49 +571,54 @@ export default function MaterialsModal({isOpen,onClose,userId}:{isOpen:boolean;o
                 </div>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex gap-3">
                 <input value={query} onChange={e=>setQuery(e.target.value)} onKeyDown={e=>{if(e.key==="Enter")handleQuery();}}
-                  placeholder="Ask anything about your materials…"
-                  className="flex-1 bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-xs text-white placeholder-white/20 focus:outline-none focus:border-emerald-400/40"/>
+                  placeholder="Ask a question about your research library…"
+                  className="flex-1 dark:bg-gray-900 bg-gray-50 border dark:border-gray-800 border-gray-100 rounded-2xl px-6 py-4 text-sm font-bold dark:text-white text-gray-800 placeholder-gray-400 focus:outline-none focus:border-indigo-500/50 transition-all"/>
                 <button onClick={()=>handleQuery()} disabled={querying||!query}
-                  className="px-4 bg-emerald-400 text-black text-xs font-bold rounded-lg hover:bg-emerald-300 disabled:opacity-40 transition-colors">Ask</button>
+                  className="px-8 bg-indigo-500 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-indigo-600 shadow-lg shadow-indigo-500/20 disabled:opacity-40 transition-all">Ask AI</button>
               </div>
 
-              <div className="min-h-[250px] bg-black/40 border border-white/8 rounded-xl p-5 overflow-y-auto max-h-[60vh] flex flex-col shadow-inner">
+              <div className="min-h-[300px] dark:bg-gray-900/60 bg-gray-50 border dark:border-gray-800 border-gray-100 rounded-[32px] p-8 overflow-y-auto max-h-[60vh] flex flex-col shadow-inner">
                 {querying?(
-                  <div className="h-full flex-1 flex flex-col items-center justify-center text-emerald-400 text-xs gap-3">
-                    <div className="flex items-center"><Loader2 size={14} className="animate-spin mr-2"/>{queryProgress}</div>
-                    <button onClick={() => abortController?.abort()} className="px-3 py-1 bg-white/5 border border-white/10 rounded hover:bg-white/10 text-white/50 hover:text-white transition-colors">Cancel</button>
+                  <div className="h-full flex-1 flex flex-col items-center justify-center text-indigo-500 text-xs gap-4">
+                    <div className="flex items-center font-black uppercase tracking-widest"><Loader2 size={16} className="animate-spin mr-3"/>{queryProgress}</div>
+                    <button onClick={() => abortController?.abort()} className="px-5 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-indigo-500 hover:bg-indigo-500 hover:text-white transition-all text-[10px] font-black uppercase tracking-widest">Cancel Query</button>
                   </div>
                 ):result?(
                   <div className="flex-1 flex flex-col">
-                    <div className="flex justify-between items-start mb-4 gap-2">
-                        <div className="flex flex-wrap gap-1.5">
-                            {result.fallback_used&&<div className="px-2 py-1 rounded bg-yellow-400/8 border border-yellow-400/20 text-[9px] text-yellow-400">Local analysis</div>}
-                            {result.action_type&&<div className="px-2 py-1 rounded bg-purple-400/10 border border-purple-400/20 text-[9px] text-purple-400">{result.action_type}</div>}
-                            {result.confidence!==undefined&&<div className="px-2 py-1 rounded bg-white/5 border border-white/10 text-[9px] text-white/40">Confidence: {Math.round(result.confidence*100)}%</div>}
-                            {result.chunks_used!==undefined&&<div className="px-2 py-1 rounded bg-emerald-400/10 border border-emerald-400/20 text-[9px] text-emerald-400">{result.chunks_used} chunk(s)</div>}
-                            {result.selected_materials&&result.selected_materials.length>0&&<div className="px-2 py-1 rounded bg-cyan-400/10 border border-cyan-400/20 text-[9px] text-cyan-400" title={result.selected_materials.join(", ")}>{result.selected_materials.length} material(s)</div>}
+                    <div className="flex justify-between items-center mb-6 gap-3 pb-4 border-b dark:border-gray-800 border-gray-100">
+                        <div className="flex flex-wrap gap-2">
+                            {result.fallback_used&&<div className="px-3 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-[9px] font-black uppercase tracking-widest text-amber-500">Local Cache</div>}
+                            {result.action_type&&<div className="px-3 py-1 rounded-lg bg-purple-500/10 border border-purple-500/20 text-[9px] font-black uppercase tracking-widest text-purple-500">{result.action_type}</div>}
+                            {result.confidence!==undefined&&<div className="px-3 py-1 rounded-lg dark:bg-gray-800 bg-white border dark:border-gray-700 border-gray-200 text-[9px] font-black uppercase tracking-widest text-gray-400">Confidence: {Math.round(result.confidence*100)}%</div>}
                         </div>
-                        <button onClick={() => navigator.clipboard.writeText(result.answer || "")} className="text-[10px] text-white/40 hover:text-white transition-colors shrink-0 bg-white/5 px-2 py-1 rounded border border-white/10">Copy Answer</button>
+                        <button onClick={() => navigator.clipboard.writeText(result.answer || "")} className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-indigo-500 transition-colors flex items-center gap-2">
+                          Copy Insight
+                        </button>
                     </div>
                     {result.missing_content_materials&&result.missing_content_materials.length>0&&(
-                      <div className="mb-4 px-3 py-2 rounded bg-amber-400/8 border border-amber-400/20 text-[10px] text-amber-400">
-                        <AlertTriangle size={12} className="inline mr-1.5 -mt-0.5"/>{result.missing_content_materials.length} material(s) missing text — <button className="underline font-semibold hover:text-amber-300 transition-colors" onClick={()=>setStep("browse")}>Extract content</button>
+                      <div className="mb-6 px-5 py-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-[11px] text-amber-600 font-medium leading-relaxed">
+                        <AlertTriangle size={14} className="inline mr-2 -mt-1"/>{result.missing_content_materials.length} nodes are missing raw data. <button className="underline font-bold hover:text-amber-700 transition-colors" onClick={()=>setStep("browse")}>Auto-Extract Now</button>
                       </div>
                     )}
-                    <div className="flex-1 text-[13px]">
+                    <div className="flex-1 prose prose-indigo max-w-none">
                         <ReactMarkdown remarkPlugins={[remarkGfm]} components={md}>{String(result.answer||"")}</ReactMarkdown>
                     </div>
                     {result.sources&&result.sources.length>0&&(
-                      <div className="mt-5 pt-3 border-t border-white/5">
-                        <p className="text-[9px] text-white/30 uppercase tracking-wider mb-2 font-semibold">Sources Cited</p>
-                        <div className="flex flex-wrap gap-1.5">{result.sources.map((s,i)=><span key={i} className="px-2 py-0.5 bg-white/5 border border-white/10 rounded text-[9px] text-white/50">{s}</span>)}</div>
+                      <div className="mt-8 pt-6 border-t dark:border-gray-800 border-gray-100">
+                        <p className="text-[10px] text-gray-400 uppercase tracking-[0.2em] mb-3 font-black">Sources Cited</p>
+                        <div className="flex flex-wrap gap-2">{result.sources.map((s,i)=><span key={i} className="px-3 py-1 bg-indigo-500/5 border border-indigo-500/20 rounded-lg text-[9px] font-bold text-indigo-500 uppercase tracking-widest">{s}</span>)}</div>
                       </div>
                     )}
                   </div>
                 ):(
-                  <div className="h-full flex-1 flex items-center justify-center text-white/15 text-xs"><FileText size={14} className="mr-1.5"/>Results appear here</div>
+                  <div className="h-full flex-1 flex flex-col items-center justify-center text-gray-300 gap-4">
+                    <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                      <FileText size={24} className="opacity-20" />
+                    </div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.4em]">Awaiting Query Initialization</p>
+                  </div>
                 )}
               </div>
             </div>
