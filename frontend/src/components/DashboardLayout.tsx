@@ -24,7 +24,7 @@ export default function DashboardLayout({
 }: DashboardLayoutProps) {
   const [mounted, setMounted] = useState(false);
   const [showMonitor, setShowMonitor] = useState(true);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isActivityOpen, setIsActivityOpen] = useState(false);
   const logEndRef = useRef<HTMLDivElement>(null);
@@ -35,7 +35,7 @@ export default function DashboardLayout({
 
   useEffect(() => { 
     const savedTheme = localStorage.getItem("skillo_theme");
-    const shouldUseDarkMode = savedTheme === "dark";
+    const shouldUseDarkMode = savedTheme !== "light";
     if (shouldUseDarkMode) {
       document.documentElement.classList.add("dark");
     }

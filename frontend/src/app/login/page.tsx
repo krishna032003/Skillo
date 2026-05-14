@@ -13,11 +13,11 @@ export default function LoginPage() {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [statusMsg, setStatusMsg] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("skillo_theme");
-    const shouldUseDarkMode = savedTheme === "dark";
+    const shouldUseDarkMode = savedTheme !== "light";
     if (shouldUseDarkMode) {
       document.documentElement.classList.add("dark");
     }

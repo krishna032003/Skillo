@@ -67,7 +67,7 @@ export default function OnboardingPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [userId, setUserId] = useState<string | null>(null);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const [direction, setDirection] = useState(1);
 
   useEffect(() => {
@@ -76,7 +76,7 @@ export default function OnboardingPage() {
     setUserId(stored);
 
     const savedTheme = localStorage.getItem("skillo_theme");
-    if (savedTheme === "dark") {
+    if (savedTheme !== "light") {
       setIsDarkMode(true);
       document.documentElement.classList.add("dark");
     }
