@@ -1,102 +1,101 @@
-# LifeOS: AI-Powered Student Productivity Command Center
+# Skillo
+### Next-Generation Student Productivity & Task Orchestration
+ 
+---
 
-LifeOS is an intelligent, agentic productivity command center designed specifically for students. It utilizes an autonomous Swarm of AI agents (powered by Google Gemini and LangGraph) to analyze student goals, intelligently schedule tasks, and provide actionable study plans.
+[![Next.js](https://img.shields.io/badge/Frontend-Next.js%2014-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?style=flat-square&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![LangGraph](https://img.shields.io/badge/Orchestration-LangGraph-6366f1?style=flat-square)](https://python.langchain.com/docs/langgraph)
+[![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248?style=flat-square&logo=mongodb)](https://www.mongodb.com/)
 
-This project was built as a College Minor Project to demonstrate the practical application of Large Language Models (LLMs) and intelligent agent routing in the ed-tech space.
-
-## 🏗️ Project Architecture
-This is a decoupled monorepo containing:
-- **`frontend/`**: The client-facing web application.
-- **`backend/`**: The API server and AI agent orchestrator.
-- **Database**: MongoDB (persistent) with a local JSON fallback (`mock_db.json`).
-
-The architecture follows a standard client-server model. The Next.js frontend sends commands to the FastAPI backend, which routes the intent through a LangGraph directed graph to specialized AI agents (Planner, Study, Productivity, Memory). 
-
-## 🛠️ Technology Stack
-* **AI & Orchestration:** LangChain, LangGraph
-* **Large Language Model:** Google Gemini 2.5 Flash
-* **Backend:** Python, FastAPI, Uvicorn
-* **Database:** MongoDB (via Motor AsyncIO)
-* **Frontend:** Next.js 14 (App Router), React, TypeScript
-* **Styling & UI:** Tailwind CSS, Framer Motion (Glassmorphism & modern UI)
-* **Authentication:** Google OAuth2
-* **Integrations:** Google Classroom API (optional for assignments)
-
-## ✨ Core Features
-1. **Smart Onboarding Profile:** Collects user academics, goals, and hard constraints.
-2. **AI Command Center:** A conversational interface that streams real-time AI thought processes.
-3. **Smart Timetable Generator:** Automatically packs student tasks into available free time, respecting constraints and inserting breaks.
-4. **Agentic Study Planner:** Generates daily study topics based on user goals.
-5. **Deep Work Focus Mode:** A distraction-free UI timer with custom app-blocking lists.
-6. **Weekly AI Review:** Analyzes past data to calculate a productivity score and provide improvement recommendations.
-7. **Offline-Ready Fallbacks:** Built-in robust algorithms if the database or AI APIs fail.
+Skillo is an advanced productivity ecosystem designed specifically for academic environments. Developed as a college minor project, it integrates a distributed network of intelligent agents to automate task scheduling, study planning, and course material synthesis.
 
 ---
 
-## 🚀 Setup Guide
+## The Skillo Philosophy
+Current productivity applications often increase cognitive load through manual overhead. Skillo addresses this by automating the transition from raw data to actionable intent.
 
-### 1. Backend (Python/FastAPI)
-Open a terminal and navigate to the backend folder:
+*   **Intent-Driven Planning**: Understands the context behind academic goals.
+*   **Agentic Framework**: Leverages LangGraph for reliable, state-driven task routing.
+*   **Live Pipeline Visibility**: Real-time streaming of backend decision-making processes.
+*   **Operational Resilience**: Built-in algorithmic fallbacks for high-availability.
+
+---
+
+## System Architecture
+The platform is built on a decoupled monorepo architecture, optimized for high-throughput interactions and real-time state synchronization.
+
+```mermaid
+graph TD
+    User((Student)) -->|Intent| NextJS[Next.js Frontend]
+    NextJS -->|REST/SSE| FastAPI[FastAPI Backend]
+    FastAPI -->|Orchestration| LangGraph{LangGraph Swarm}
+    LangGraph -->|Planner| AgentA[Timetable Agent]
+    LangGraph -->|Study| AgentB[Study Agent]
+    LangGraph -->|Memory| AgentC[Reflection Agent]
+    AgentA & AgentB & AgentC -->|Response| FastAPI
+    FastAPI -->|Stream| NextJS
+    FastAPI <-->|Persistence| MongoDB[(MongoDB / MockDB)]
+```
+
+### Technical Specification
+| Component | Implementation | Primary Responsibility |
+| :--- | :--- | :--- |
+| **Orchestrator** | LangGraph | Intent classification & stateful routing |
+| **Backend API** | FastAPI | Async IO management & SSE streaming |
+| **Client Interface** | Next.js 14 | Responsive UI & real-time dashboard |
+| **Data Layer** | MongoDB | Profile persistence & historical context |
+
+---
+
+## Deployment & Setup
+
+### Prerequisites
+*   Python 3.12+
+*   Node.js 20+
+*   Google Gemini API Credentials
+
+### Backend (API & Agents)
 ```bash
 cd backend
 python -m venv .venv
-
-# On Windows:
-.venv\Scripts\activate
-# On Mac/Linux:
-# source .venv/bin/activate
-
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-```
-
-**Backend Environment Variables (`backend/.env`):**
-Create a `.env` file in the `backend/` directory:
-```env
-GEMINI_API_KEY=your_google_gemini_api_key
-MONGO_URI=mongodb://localhost:27017 # Or your MongoDB Atlas URL
-```
-
-**Start the Backend Server:**
-```bash
 python main.py
 ```
-*(The API will start running on `http://localhost:8000`)*
 
----
-
-### 2. Frontend (Next.js)
-Open a **new** terminal window and navigate to the frontend folder:
+### Frontend (Dashboard)
 ```bash
 cd frontend
 npm install
-```
-
-**Frontend Environment Variables (`frontend/.env.local`):**
-Create a `.env.local` file in the `frontend/` directory:
-```env
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
-NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_oauth_client_id.apps.googleusercontent.com
-# Optional: Only needed if you want a separate Google Classroom specific Client ID
-NEXT_PUBLIC_CLASSROOM_CLIENT_ID=optional_classroom_oauth_client_id.apps.googleusercontent.com
-```
-
-*Note: Both Google Client IDs must be generated as "Web application" types in the Google Cloud Console. Android, Desktop, or raw API keys will not work. `NEXT_PUBLIC_CLASSROOM_CLIENT_ID` is optional if `NEXT_PUBLIC_GOOGLE_CLIENT_ID` is already a valid Web OAuth client.*
-
-**Start the Frontend Server:**
-```bash
 npm run dev
 ```
-*(The web app will start running on `http://localhost:3000`)*
 
 ---
 
-## 🎬 Demo Flow
-Follow these exact steps for the best demonstration experience:
-1. **Start Servers:** Ensure both the backend (`python main.py`) and frontend (`npm run dev`) are actively running.
-2. **Access App:** Open a browser to `http://localhost:3000`.
-3. **Login & Onboard:** Sign in via Google Auth. Complete the onboarding screen to register your name, major, and primary goals.
-4. **Command Center:** Observe the dynamic particle background. 
-5. **Smart Timetable:** Click "⚡ Timetable", add a few dummy tasks, and click "Generate". Show how the AI intelligently schedules breaks.
-6. **Study Plan:** Click "📚 Study Today" in the dock to trigger the AI Study Agent. Watch the thought-process stream in real-time.
-7. **Focus Mode:** Click the "🧘 Deep Work" button to show the custom timer and app-blocker UI.
-8. **Weekly Review:** Click "📊 Review" to demonstrate the AI analyzing past performance and returning a health score.
+## Core Capabilities
+
+### Distributed Intelligence
+Skillo manages a coordinated group of specialized agents:
+- **Planning Expert**: Optimizes daily schedules by calculating cognitive load and rest cycles.
+- **Academic Analyst**: Synthesizes course materials into structured revision guides using RAG.
+- **Performance Monitor**: Evaluates historical data to provide weekly productivity metrics.
+
+### Deep Work Environment
+A minimalist focus interface designed to eliminate digital distractions, featuring integrated session timers and custom application blocking.
+
+### LMS Integration
+Direct ingestion and analysis of materials from external sources like Google Classroom, allowing for immediate knowledge extraction and exam preparation.
+
+---
+
+## Operational Reliability
+Skillo is engineered for stability in critical environments:
+*   **Automatic Data Fallback**: Transitions to local JSON storage if MongoDB Atlas is unreachable.
+*   **Deterministic Logic Fallback**: Switches to priority-based Python algorithms if the LLM API is unavailable.
+
+---
+
+<div align="center">
+  <p><i>Research Project: Engineering Agentic Workflows in Ed-Tech.</i></p>
+</div>

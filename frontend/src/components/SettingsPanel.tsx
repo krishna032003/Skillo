@@ -10,6 +10,15 @@ import {
 import { useRouter } from "next/navigation";
 import { API_BASE } from "@/services/api";
 
+interface UserProfile {
+  name?: string;
+  profession?: string;
+  picture?: string | null;
+  goals?: string[];
+  active_goals?: string[];
+  objectives?: string[];
+}
+
 export default function SettingsPanel({ onProfileUpdate }: { onProfileUpdate?: () => void }) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -17,7 +26,7 @@ export default function SettingsPanel({ onProfileUpdate }: { onProfileUpdate?: (
   const [activeSection, setActiveSection] = useState("profile");
   const [isDeleting, setIsDeleting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -35,7 +44,7 @@ export default function SettingsPanel({ onProfileUpdate }: { onProfileUpdate?: (
   }, []);
 
   const fetchProfile = async () => {
-    const userId = localStorage.getItem("lifeos_user_id");
+    const userId = localStorage.getItem("skillo_user_id");
     if (!userId) {
       setIsLoading(false);
       return;
@@ -76,7 +85,7 @@ export default function SettingsPanel({ onProfileUpdate }: { onProfileUpdate?: (
   };
 
   const handleSaveChanges = async () => {
-    const userId = localStorage.getItem("lifeos_user_id");
+    const userId = localStorage.getItem("skillo_user_id");
     if (!userId) return;
 
     setIsSaving(true);
@@ -94,8 +103,8 @@ export default function SettingsPanel({ onProfileUpdate }: { onProfileUpdate?: (
         }),
       });
       if (res.ok) {
-        localStorage.setItem("lifeos_user_name", editName);
-        if (editPicture) localStorage.setItem("lifeos_user_picture", editPicture);
+        localStorage.setItem("skillo_user_name", editName);
+        if (editPicture) localStorage.setItem("skillo_user_picture", editPicture);
 
         alert("Profile updated successfully!");
         if (onProfileUpdate) onProfileUpdate();
@@ -111,7 +120,7 @@ export default function SettingsPanel({ onProfileUpdate }: { onProfileUpdate?: (
   };
 
   const handleDeleteAccount = async () => {
-    const userId = localStorage.getItem("lifeos_user_id");
+    const userId = localStorage.getItem("skillo_user_id");
     if (!userId) return;
 
     const confirmed = window.confirm(
@@ -199,7 +208,7 @@ export default function SettingsPanel({ onProfileUpdate }: { onProfileUpdate?: (
               {sections.find(s => s.id === activeSection)?.label} <span className="text-indigo-500">Config.</span>
             </h1>
             <p className="text-gray-400 font-medium text-xs mt-1 uppercase tracking-widest opacity-80">
-              System Nodes: {activeSection.toUpperCase()} // Management & Core Calibration
+              System Nodes: {activeSection.toUpperCase()} <span aria-hidden="true">{"//"}</span> Management & Core Calibration
             </p>
           </header>
 

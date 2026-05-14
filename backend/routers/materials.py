@@ -662,7 +662,7 @@ async def query_materials(data: QueryInput):
             
             llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", api_key=gemini_key)
 
-            system_prompt = f"""You are a Study Coach AI for LifeOS. {system_task}
+            system_prompt = f"""You are a Study Coach AI for Skillo. {system_task}
 
     Keep your answer focused, exam-ready, and highly detailed. Do not cut off the response abruptly.
     If the extracted text contains raw or broken math formulas, translate them into readable plain English.

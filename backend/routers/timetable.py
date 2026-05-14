@@ -87,7 +87,7 @@ async def generate_timetable(req: TimetableRequest):
     # Format tasks for the prompt
     tasks_text = "\n".join([f"- {t.title} ({t.durationMinutes} min) [Priority: {t.priority}] {('Deadline: '+t.deadline) if t.deadline else ''}" for t in req.tasks])
     
-    prompt = f"""You are LifeOS, an elite academic scheduler.
+    prompt = f"""You are Skillo, an elite academic scheduler.
 Create a highly practical and realistic day plan for a student.
 
 User Goals: {goals}

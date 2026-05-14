@@ -84,7 +84,7 @@ export default function ProfileMenu() {
 
   /* ── Load profile ── */
   useEffect(() => {
-    const userId = localStorage.getItem("lifeos_user_id");
+    const userId = localStorage.getItem("skillo_user_id");
     if (!userId) {
       queueMicrotask(() => setLoading(false));
       return;
@@ -98,16 +98,16 @@ export default function ProfileMenu() {
           // Fallback to localStorage if backend is down
           setProfile({
             user_id: userId,
-            name: localStorage.getItem("lifeos_user_name") ?? "User",
-            email: localStorage.getItem("lifeos_user_email") ?? undefined,
+            name: localStorage.getItem("skillo_user_name") ?? "User",
+            email: localStorage.getItem("skillo_user_email") ?? undefined,
           });
         }
       })
       .catch(() => {
         setProfile({
           user_id: userId,
-          name: localStorage.getItem("lifeos_user_name") ?? "User",
-          email: localStorage.getItem("lifeos_user_email") ?? undefined,
+          name: localStorage.getItem("skillo_user_name") ?? "User",
+          email: localStorage.getItem("skillo_user_email") ?? undefined,
         });
       })
       .finally(() => setLoading(false));
@@ -126,15 +126,15 @@ export default function ProfileMenu() {
 
   /* ── Logout ── */
   const handleLogout = () => {
-    localStorage.removeItem("lifeos_user_id");
-    localStorage.removeItem("lifeos_user_email");
-    localStorage.removeItem("lifeos_user_name");
+    localStorage.removeItem("skillo_user_id");
+    localStorage.removeItem("skillo_user_email");
+    localStorage.removeItem("skillo_user_name");
     router.push("/login");
   };
 
   const goals = profile?.active_goals ?? profile?.goals ?? [];
   const displayName = profile?.name ?? "Loading…";
-  const email = profile?.email ?? localStorage.getItem("lifeos_user_email") ?? "";
+  const email = profile?.email ?? localStorage.getItem("skillo_user_email") ?? "";
 
   return (
     <div className="relative" ref={menuRef}>

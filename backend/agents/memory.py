@@ -8,7 +8,7 @@ from google import genai
 
 pc_key = os.getenv("PINECONE_API_KEY", "")
 gemini_key = os.getenv("GEMINI_API_KEY", "")
-index_name = "lifeos"
+index_name = "skillo"
 
 pc = None
 index = None

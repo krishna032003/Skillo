@@ -38,7 +38,15 @@ const CARDS = [
   { label: "Knowledge Base", desc: "Search documents & notes", icon: Search, action: "materials", cmd: "", color: "purple" },
 ];
 
-function EmptyWorkspace({ onAction, onOpenFocus, onOpenMaterials, assignmentsData, totalFocusMinutes }: any) {
+interface EmptyWorkspaceProps {
+  onAction: (cmd: string, label: string) => void;
+  onOpenFocus: () => void;
+  onOpenMaterials: () => void;
+  assignmentsData: Assignment[];
+  totalFocusMinutes: number;
+}
+
+function EmptyWorkspace({ onAction, onOpenFocus, onOpenMaterials, assignmentsData, totalFocusMinutes }: EmptyWorkspaceProps) {
   return (
     <div className="flex-1 overflow-y-auto px-10 py-16 space-y-16 max-w-6xl mx-auto w-full">
       
@@ -80,7 +88,7 @@ function EmptyWorkspace({ onAction, onOpenFocus, onOpenMaterials, assignmentsDat
         </div>
         <div className="grid grid-cols-2 gap-6">
           {CARDS.map((c, i) => {
-            const colorMap: any = {
+            const colorMap: Record<string, { text: string; bg: string; border: string; glow: string }> = {
               indigo: { text: "text-indigo-500", bg: "bg-indigo-500/10", border: "border-indigo-500/20", glow: "hover:border-indigo-500/50 hover:shadow-indigo-500/10" },
               emerald: { text: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/20", glow: "hover:border-emerald-500/50 hover:shadow-emerald-500/10" },
               amber: { text: "text-amber-500", bg: "bg-amber-500/10", border: "border-amber-500/20", glow: "hover:border-amber-500/50 hover:shadow-amber-500/10" },

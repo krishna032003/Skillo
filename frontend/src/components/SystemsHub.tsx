@@ -39,7 +39,7 @@ export default function SystemsHub({ onNav, onAction }: SystemsHubProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {systems.map((s, i) => {
-             const colorMap: any = {
+             const colorMap: Record<string, string> = {
                indigo: "text-indigo-500 bg-indigo-500/10 border-indigo-500/20 hover:border-indigo-500/50 hover:shadow-indigo-500/5",
                orange: "text-orange-500 bg-orange-500/10 border-orange-500/20 hover:border-orange-500/50 hover:shadow-orange-500/5",
                purple: "text-purple-500 bg-purple-500/10 border-purple-500/20 hover:border-purple-500/50 hover:shadow-purple-500/5",

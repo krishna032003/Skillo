@@ -3,7 +3,7 @@ from functools import lru_cache
 
 class Settings(BaseSettings):
     gemini_api_key: str = "your_gemini_api_key_here"
-    mongo_uri: str = "mongodb://localhost:27017/lifeos"
+    mongo_uri: str = "mongodb://localhost:27017/skillo"
     pinecone_api_key: str = "your_pinecone_api_key_here"
 
     model_config = SettingsConfigDict(env_file=".env")

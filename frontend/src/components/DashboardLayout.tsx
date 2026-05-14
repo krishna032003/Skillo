@@ -11,7 +11,7 @@ import Image from "next/image";
 interface LogEntry { id: string; agent: string; message: string; timestamp: string; status: string; }
 
 interface DashboardLayoutProps {
-  userProfile: any;
+  userProfile: { picture?: string } | null;
   sidebarContent: React.ReactNode;
   centralArea: React.ReactNode;
   logs: LogEntry[];
@@ -27,12 +27,16 @@ export default function DashboardLayout({
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => { 
-    setMounted(true);
     const savedTheme = localStorage.getItem("skillo_theme");
-    if (savedTheme === "dark") {
-      setIsDarkMode(true);
+    const shouldUseDarkMode = savedTheme === "dark";
+    if (shouldUseDarkMode) {
       document.documentElement.classList.add("dark");
     }
+    const mountedTimer = window.setTimeout(() => {
+      setMounted(true);
+      setIsDarkMode(shouldUseDarkMode);
+    }, 0);
+    return () => window.clearTimeout(mountedTimer);
   }, []);
 
   const toggleTheme = () => {
@@ -97,11 +101,11 @@ export default function DashboardLayout({
                <Bell size={18} className="hover:text-indigo-500 cursor-pointer transition-colors" />
                <Settings size={18} className="hover:text-indigo-500 cursor-pointer transition-colors" onClick={() => onNav('settings')} />
                <div className={`w-8 h-8 rounded-full border overflow-hidden relative cursor-pointer ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-100 border-gray-200'}`} onClick={() => onNav('settings')}>
-                  {userProfile?.picture || localStorage.getItem("lifeos_user_picture") ? (
-                    <img src={userProfile?.picture || localStorage.getItem("lifeos_user_picture")!} alt="avatar" className="w-full h-full object-cover" />
+                  {userProfile?.picture || localStorage.getItem("skillo_user_picture") ? (
+                    <img src={userProfile?.picture || localStorage.getItem("skillo_user_picture")!} alt="avatar" className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-indigo-50 dark:bg-indigo-900/30 text-indigo-500 text-[10px] font-black uppercase">
-                       {localStorage.getItem("lifeos_user_name")?.slice(0, 2).toUpperCase() || "GY"}
+                       {localStorage.getItem("skillo_user_name")?.slice(0, 2).toUpperCase() || "GY"}
                     </div>
                   )}
                </div>

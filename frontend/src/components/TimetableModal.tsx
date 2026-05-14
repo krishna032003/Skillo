@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { API_BASE } from "@/services/api";
-import { X, Calendar, Plus, Trash2, Zap, Clock, CheckCircle2, Coffee, Sparkles, Loader2 } from "lucide-react";
+import { X, Calendar, Plus, Trash2, Zap, Clock, CheckCircle2, Coffee, Sparkles, Loader2, AlertCircle } from "lucide-react";
 
 export interface Task {
   title: string;
@@ -191,7 +191,7 @@ export default function TimetableModal({ isOpen, onClose, userId }: TimetableMod
                      {['High', 'Medium', 'Low'].map((p) => (
                        <button 
                          key={p}
-                         onClick={() => setNewTask({...newTask, priority: p as any})}
+                         onClick={() => setNewTask({...newTask, priority: p as Task["priority"]})}
                          className={`flex-1 py-4 rounded-2xl border text-[10px] font-black uppercase tracking-widest transition-all ${newTask.priority === p ? 'bg-indigo-500 border-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'dark:bg-gray-900 bg-gray-50 dark:border-gray-800 border-gray-100 text-gray-400'}`}
                        >
                          {p}

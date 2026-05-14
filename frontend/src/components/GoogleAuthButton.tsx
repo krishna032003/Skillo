@@ -142,7 +142,7 @@ export default function GoogleAuthButton({
       try {
         const data = await exchangeToken(event.data.idToken, event.data.accessToken);
         if (event.data.accessToken) {
-          localStorage.setItem("lifeos_google_access_token", event.data.accessToken);
+          localStorage.setItem("skillo_google_access_token", event.data.accessToken);
         }
         onSuccess(data.user_id, data.email, data.name, data.onboarded);
       } catch (err: unknown) {

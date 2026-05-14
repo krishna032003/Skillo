@@ -3,7 +3,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 async def main():
     client = AsyncIOMotorClient('mongodb://localhost:27017')
-    db = client.get_database("lifeos")
+    db = client.get_database("skillo")
     doc = await db.users.find_one({"user_id": "Krishna Sahu"})
     print("Database Document for Krishna Sahu:")
     print(doc)

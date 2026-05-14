@@ -65,7 +65,7 @@ export default function OnboardingPage() {
   const [direction, setDirection] = useState(1);
 
   useEffect(() => {
-    const stored = localStorage.getItem("lifeos_user_id");
+    const stored = localStorage.getItem("skillo_user_id");
     if (!stored) { router.replace("/login"); return; }
     setUserId(stored);
 
@@ -121,7 +121,7 @@ export default function OnboardingPage() {
     if (!finalObj.trim()) { setError("Tasks are compulsory."); return; }
     setIsLoading(true); setError("");
 
-    const uid = userId ?? localStorage.getItem("lifeos_user_id") ?? "";
+    const uid = userId ?? localStorage.getItem("skillo_user_id") ?? "";
     try {
       const res = await fetch(`${API_BASE}/api/onboard`, {
         method: "POST",
@@ -135,8 +135,8 @@ export default function OnboardingPage() {
         }),
       });
       if (!res.ok) throw new Error("Failed to save. Please try again.");
-      localStorage.setItem("lifeos_user_name", name.trim());
-      if (imagePreview) localStorage.setItem("lifeos_user_picture", imagePreview);
+      localStorage.setItem("skillo_user_name", name.trim());
+      if (imagePreview) localStorage.setItem("skillo_user_picture", imagePreview);
       router.push("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unexpected error.");
@@ -149,7 +149,7 @@ export default function OnboardingPage() {
       setError('Type "delete" to confirm.'); return;
     }
     setDeleting(true);
-    const uid = userId ?? localStorage.getItem("lifeos_user_id") ?? "";
+    const uid = userId ?? localStorage.getItem("skillo_user_id") ?? "";
     try {
       await fetch(`${API_BASE}/api/user/${uid}`, { method: "DELETE" });
     } catch (_) {}
@@ -199,7 +199,7 @@ export default function OnboardingPage() {
                       <User size={32} />
                     </div>
                     <h1 className="text-3xl font-display tracking-tight mb-2">Welcome to Skillo</h1>
-                    <p className="text-gray-400 font-medium text-sm italic">"Your journey to master focus begins here."</p>
+                    <p className="text-gray-400 font-medium text-sm italic">&ldquo;Your journey to master focus begins here.&rdquo;</p>
                   </div>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center px-2">

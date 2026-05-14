@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 from pydantic import BaseModel
 import logging
 from dotenv import load_dotenv
@@ -8,6 +9,10 @@ import os
 import asyncio
 import platform
 from datetime import datetime, timedelta, timezone
+import warnings
+
+# Suppress Pydantic V1 warnings related to Python 3.14+ compatibility
+warnings.filterwarnings("ignore", message=".*Pydantic V1 functionality isn't compatible with Python 3.14.*")
 
 # Ensure the parent directory is in the Python path so "backend.agents" can be resolved
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -17,21 +22,8 @@ env_path = os.path.join(os.path.dirname(__file__), ".env")
 load_dotenv(env_path, override=True)
 
 
-app = FastAPI(title="LifeOS Agent Backend")
-
-# Setup CORS for the Next.js frontend
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],  # Next.js default port
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 from backend.routers.timetable import router as timetable_router
 from backend.routers.materials import router as materials_router
-app.include_router(timetable_router)
-app.include_router(materials_router)
 
 from fastapi.responses import StreamingResponse
 from langchain_core.messages import HumanMessage
@@ -51,7 +43,7 @@ from urllib.parse import quote_plus
 import httpx
 
 # MongoDB Setup
-uri = os.getenv("MONGO_URI", os.getenv("MONGODB_URL", "mongodb://localhost:27017/lifeos"))
+uri = os.getenv("MONGO_URI", os.getenv("MONGODB_URL", "mongodb://localhost:27017/skillo"))
 
 from pymongo.server_api import ServerApi
 
@@ -62,11 +54,11 @@ client = AsyncIOMotorClient(
     tlsAllowInvalidCertificates=True,
     server_api=ServerApi('1')
 )
-db = client.get_database("lifeos")
+db = client.get_database("skillo")
 
-@app.on_event("startup")
-async def startup_db_client():
-    # Send a ping to confirm a successful connection
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup logic: Send a ping to confirm a successful connection
     try:
         await client.admin.command('ping')
         print("Pinged your deployment. You successfully connected to MongoDB!")
@@ -78,6 +70,23 @@ async def startup_db_client():
         print(f"GEMINI_API_KEY loaded: yes, length: {len(gemini_key)}, ends with: {gemini_key[-4:] if len(gemini_key) > 4 else '***'}")
     else:
         print("GEMINI_API_KEY loaded: no")
+    
+    yield
+    # Shutdown logic can be added here if needed
+
+app = FastAPI(title="Skillo Agent Backend", lifespan=lifespan)
+
+# Setup CORS for the Next.js frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],  # Next.js default port
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(timetable_router)
+app.include_router(materials_router)
 
 class GoogleAuthRequest(BaseModel):
     token: str
@@ -304,7 +313,7 @@ class ChatRequest(BaseModel):
 
 @app.get("/")
 async def root():
-    return {"project": "LifeOS Command Center", "status": "online", "message": "Welcome to LifeOS AI"}
+    return {"project": "Skillo Command Center", "status": "online", "message": "Welcome to Skillo AI"}
 
 @app.get("/health")
 async def health_check():
@@ -441,7 +450,7 @@ async def get_classroom_courses(user_id: str):
             raise HTTPException(
                 status_code=403,
                 detail=f"Google returned 403 - your access token is missing Classroom API scopes. "
-                       f"Please sign out of LifeOS and sign in again to re-grant permissions. "
+                       f"Please sign out of Skillo and sign in again to re-grant permissions. "
                        f"Google error: {res.text}"
             )
         if res.status_code != 200:

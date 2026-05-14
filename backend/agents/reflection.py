@@ -28,7 +28,7 @@ async def reflection_node(state: AgentState):
         lower = user_msg.lower().strip()
         
         if "who are you" in lower:
-            final_response = "I'm LifeOS, your student command center for study planning, Classroom/RAG notes, timetables, deadlines, and focus sessions."
+            final_response = "I'm Skillo, your student command center for study planning, Classroom/RAG notes, timetables, deadlines, and focus sessions."
         elif "how are you" in lower or "how r u" in lower:
             final_response = "I'm good, ready to help. Want to work on study planning, RAG notes, timetable, or focus?"
         elif any(w in lower for w in ["hi", "hello", "hey"]):

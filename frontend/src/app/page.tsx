@@ -18,6 +18,7 @@ import { motion } from "framer-motion";
 
 interface Course { id?: string; name?: string; section?: string; descriptionHeading?: string; alternateLink?: string; }
 interface Assignment { title?: string; dueDate?: { year: number; month: number; day: number }; dueTime?: { hours: number; minutes: number }; courseName?: string; alternateLink?: string; }
+interface UserProfile { name?: string; picture?: string; total_focus_minutes?: number; }
 
 type PipelineStatus = "idle" | "thinking" | "streaming" | "done" | "error";
 
@@ -26,7 +27,7 @@ export default function Home() {
 
   // Auth / loading
   const [userId, setUserId] = useState<string | null>(null);
-  const [userProfile, setUserProfile] = useState<any>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isAppLoading, setIsAppLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
 
@@ -84,19 +85,19 @@ export default function Home() {
   }, []);
 
   const checkUser = async () => {
-    const id = localStorage.getItem("lifeos_user_id");
+    const id = localStorage.getItem("skillo_user_id");
     if (!id) { router.push("/login"); return; }
     setUserId(id);
     try {
       const r = await fetch(`${API_BASE}/api/user/${encodeURIComponent(id)}`);
-      if (r.status === 404) { localStorage.removeItem("lifeos_user_id"); router.push("/login"); return; }
+      if (r.status === 404) { localStorage.removeItem("skillo_user_id"); router.push("/login"); return; }
       if (r.ok) { 
         const d = await r.json(); 
         setUserProfile(d);
         if (d.total_focus_minutes) setTotalFocusMinutes(d.total_focus_minutes); 
         // Sync local storage for components that might still read from it
-        if (d.name) localStorage.setItem("lifeos_user_name", d.name);
-        if (d.picture) localStorage.setItem("lifeos_user_picture", d.picture);
+        if (d.name) localStorage.setItem("skillo_user_name", d.name);
+        if (d.picture) localStorage.setItem("skillo_user_picture", d.picture);
       }
     } catch { /* backend may be offline */ } finally { setIsAppLoading(false); }
   };
@@ -116,7 +117,7 @@ export default function Home() {
 
     try {
       addLog("System", "Connecting to AI Assistant...");
-      const uid = userId ?? localStorage.getItem("lifeos_user_id") ?? "guest";
+      const uid = userId ?? localStorage.getItem("skillo_user_id") ?? "guest";
       await streamAgentChat(uid, label, commandType, {
         onPipelineLog: (node, message) => { setPipelineStatus("streaming"); addLog(node, message); },
         onStateUpdate: (focus) => { if (focus > 0) setFocusProgress(focus); },
@@ -160,7 +161,7 @@ export default function Home() {
     addLog("User", `Chat: ${input}`);
 
     try {
-      const activeUid = userId ?? localStorage.getItem("lifeos_user_id") ?? "guest";
+      const activeUid = userId ?? localStorage.getItem("skillo_user_id") ?? "guest";
       await streamAgentChat(activeUid, input, "general_chat", {
         onPipelineLog: (node, message) => { setPipelineStatus("streaming"); addLog(node, message); },
         onStateUpdate: (focus) => { if (focus > 0) setFocusProgress(focus); },
@@ -241,10 +242,10 @@ export default function Home() {
     setClassroomData([]); setAssignmentsData([]);
     addLog("System", "Fetching Classroom data...");
     try {
-      const uid = userId ?? localStorage.getItem("lifeos_user_id") ?? "guest";
+      const uid = userId ?? localStorage.getItem("skillo_user_id") ?? "guest";
 
       // Ensure the access token is saved to backend before fetching
-      const storedToken = localStorage.getItem("lifeos_google_access_token");
+      const storedToken = localStorage.getItem("skillo_google_access_token");
       if (storedToken) {
         await fetch(`${API_BASE}/api/classroom/${encodeURIComponent(uid)}/token`, {
           method: "POST",

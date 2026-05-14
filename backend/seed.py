@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-raw_uri = os.getenv("MONGO_URI", "mongodb://localhost:27017/lifeos")
+raw_uri = os.getenv("MONGO_URI", "mongodb://localhost:27017/skillo")
 if "@" in raw_uri and raw_uri.startswith("mongodb+srv://") and raw_uri.count("@") > 1:
     parts = raw_uri.split("@")
     if len(parts) >= 3:
@@ -28,7 +28,7 @@ async def seed_database():
     try:
         db = client.get_database()
     except Exception:
-        db = client.get_database("lifeos")
+        db = client.get_database("skillo")
     
     users_collection = db["users"]
     
@@ -48,7 +48,7 @@ async def seed_database():
             "Secure an Uber internship",
             "Solve 3 competitive programming questions in C++ daily"
         ],
-        "constraints": [
+        "hard_constraints": [
             "Monday 09:00 AM - Operations Research (Prof. Amita Bhagat)"
         ],
         "created_at": now,
@@ -64,4 +64,4 @@ async def seed_database():
     print(user)
 
 if __name__ == "__main__":
-    asyncio.run(seed_database()). 
+    asyncio.run(seed_database())

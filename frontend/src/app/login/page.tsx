@@ -16,17 +16,21 @@ export default function LoginPage() {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     const savedTheme = localStorage.getItem("skillo_theme");
-    if (savedTheme === "dark") {
-      setIsDarkMode(true);
+    const shouldUseDarkMode = savedTheme === "dark";
+    if (shouldUseDarkMode) {
       document.documentElement.classList.add("dark");
     }
-    const existing = localStorage.getItem("lifeos_user_id");
+    const mountedTimer = window.setTimeout(() => {
+      setMounted(true);
+      setIsDarkMode(shouldUseDarkMode);
+    }, 0);
+    const existing = localStorage.getItem("skillo_user_id");
     if (!existing) return;
     fetch(`${API_BASE}/api/user/${encodeURIComponent(existing)}`)
       .then((res) => { if (res.ok) router.replace("/"); })
       .catch(() => {});
+    return () => window.clearTimeout(mountedTimer);
   }, [router]);
 
   const toggleTheme = () => {
@@ -44,12 +48,12 @@ export default function LoginPage() {
   const handleAuthSuccess = async (userId: string, email: string, name: string, onboarded: boolean = false) => {
     setIsAuthenticating(true);
     setStatusMsg(`Welcome, ${name}! Setting up your workspace…`);
-    localStorage.setItem("lifeos_user_id", userId);
-    localStorage.setItem("lifeos_user_email", email);
-    localStorage.setItem("lifeos_user_name", name);
+    localStorage.setItem("skillo_user_id", userId);
+    localStorage.setItem("skillo_user_email", email);
+    localStorage.setItem("skillo_user_name", name);
 
     try {
-      const accessToken = localStorage.getItem("lifeos_google_access_token");
+      const accessToken = localStorage.getItem("skillo_google_access_token");
       if (accessToken) {
         fetch(`${API_BASE}/api/classroom/${encodeURIComponent(userId)}/token`, {
           method: "POST", headers: { "Content-Type": "application/json" },

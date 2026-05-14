@@ -9,14 +9,14 @@ import {
 import { motion } from "framer-motion";
 
 interface AppSidebarProps {
-  userProfile: any;
+  userProfile: { name?: string; picture?: string } | null;
   activeNav: string;
   onNav: (key: string) => void;
   focusProgress: number;
   totalFocusMinutes: number;
   isFocusActive: boolean;
-  classroomData: any[];
-  assignmentsData: any[];
+  classroomData: unknown[];
+  assignmentsData: unknown[];
   isClassroomLoading: boolean;
   onSyncClassroom: () => void;
 }
@@ -53,16 +53,16 @@ export default function AppSidebar({
            <div className="flex items-center gap-3">
               <div className="w-11 h-11 rounded-full p-0.5 bg-gradient-to-tr from-indigo-500 via-[#0052FF] to-purple-500">
                 <div className="w-full h-full rounded-full bg-white dark:bg-gray-900 flex items-center justify-center text-[#0052FF] font-bold overflow-hidden relative">
-                   {userProfile?.picture || localStorage.getItem("lifeos_user_picture") ? (
-                     <img src={userProfile?.picture || localStorage.getItem("lifeos_user_picture")!} alt="avatar" className="w-full h-full object-cover" />
+                   {userProfile?.picture || localStorage.getItem("skillo_user_picture") ? (
+                     <img src={userProfile?.picture || localStorage.getItem("skillo_user_picture")!} alt="avatar" className="w-full h-full object-cover" />
                    ) : (
-                     <span className="text-xs">{localStorage.getItem("lifeos_user_name")?.slice(0, 2).toUpperCase() || "GY"}</span>
+                     <span className="text-xs">{localStorage.getItem("skillo_user_name")?.slice(0, 2).toUpperCase() || "GY"}</span>
                    )}
                 </div>
               </div>
               <div className="flex-1 min-w-0">
                  <p className="text-[10px] font-black uppercase tracking-wider dark:text-white text-[#111827] truncate">
-                   {userProfile?.name || localStorage.getItem("lifeos_user_name") || "Gaurav Yadav"}
+                   {userProfile?.name || localStorage.getItem("skillo_user_name") || "Gaurav Yadav"}
                  </p>
                  <div className="flex items-center gap-1.5 mt-0.5">
                    <div className={`w-1.5 h-1.5 rounded-full ${isFocusActive ? 'bg-emerald-500 animate-pulse' : 'bg-[#0052FF]'}`} />
