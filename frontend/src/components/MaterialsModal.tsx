@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { API_BASE } from "@/services/api";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { X, Plus, Trash2, BookOpen, Brain, FileText, ChevronRight, ChevronLeft, ExternalLink, AlertTriangle, Loader2, GraduationCap, PenLine, CheckSquare, Square } from "lucide-react";
+import { X, Plus, Trash2, BookOpen, Brain, ChevronRight, ChevronLeft, ExternalLink, AlertTriangle, Loader2, GraduationCap, PenLine, CheckSquare, Square } from "lucide-react";
 
 interface Material { id:string; title:string; source?:string; courseName?:string; content_available?:boolean; created_at:string; topicName?:string; content_status?:string; content_type?:string; driveFileId?:string; mimeType?:string; }
 interface ClassroomCourse { courseId:string; courseName:string; section?:string; topics?:{id:string;name:string}[]; materials:{type:string;title:string;alternateLink?:string;driveFileId?:string;courseId:string;courseName:string;mimeType?:string;sourceType?:string;parentTitle?:string;topicName?:string;content_type?:string;}[]; }
@@ -59,21 +59,7 @@ export default function MaterialsModal({isOpen,onClose,userId}:{isOpen:boolean;o
   const [result,setResult]=useState<QResult|null>(null);
   const [extractingId,setExtractingId]=useState<string|null>(null);
   const [extractErrors,setExtractErrors]=useState<Record<string,string>>({});
-  const [driveDebugLogs, setDriveDebugLogs] = useState<Record<string,Record<string,unknown>>>({});
   const [materialsError, setMaterialsError] = useState("");
-
-  const handleDebugDrive=async(matId:string, driveId:string)=>{
-    if(!userId) return;
-    setDriveDebugLogs(p=>({...p, [matId]: { loading: true }}));
-    try{
-      const r=await fetch(`${API_BASE}/api/debug/drive?user_id=${userId}&drive_file_id=${driveId}`);
-      const d=await r.json();
-      setDriveDebugLogs(p=>({...p, [matId]:d}));
-    }catch(e:unknown){
-      setDriveDebugLogs(p=>({...p, [matId]:{error:(e as Error).message}}));
-    }
-  };
-
   const fetchMaterials=useCallback(async()=>{
     if(!userId) return;
     try{
@@ -233,30 +219,30 @@ export default function MaterialsModal({isOpen,onClose,userId}:{isOpen:boolean;o
   const courseData=activeCourse?courses.find(c=>c.courseId===activeCourse):null;
 
   return(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-md">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6 bg-black/60 backdrop-blur-md">
       <motion.div initial={{opacity:0,scale:0.98}} animate={{opacity:1,scale:1}}
-        className="relative w-full max-w-4xl dark:bg-[#0c0d10] bg-white border dark:border-gray-800 border-gray-100 rounded-[32px] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transition-colors">
+        className="relative w-full max-w-4xl dark:bg-[#0c0d10] bg-white border dark:border-gray-800 border-gray-100 rounded-[24px] md:rounded-[32px] shadow-2xl flex flex-col max-h-[95vh] md:max-h-[90vh] overflow-hidden transition-colors">
 
         {/* Header */}
-        <div className="flex items-center justify-between px-8 py-5 border-b dark:border-gray-800 border-gray-100 shrink-0">
+        <div className="flex items-center justify-between px-6 md:px-8 py-4 md:py-5 border-b dark:border-gray-800 border-gray-100 shrink-0">
           <div className="flex items-center gap-3">
             <Brain size={18} className="text-indigo-500"/>
-            <h2 className="text-sm font-display font-bold dark:text-white text-gray-800">Learning Architecture</h2>
-            {selected.size>0&&<span className="text-[10px] px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-500 font-bold border border-indigo-500/20">{selected.size} active nodes</span>}
+            <h2 className="text-xs md:text-sm font-display font-bold dark:text-white text-gray-800">Learning Architecture</h2>
+            {selected.size>0&&<span className="hidden sm:inline-block text-[10px] px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-500 font-bold border border-indigo-500/20">{selected.size} active nodes</span>}
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-indigo-500 transition-colors"><X size={18}/></button>
+          <button onClick={onClose} className="text-gray-400 hover:text-indigo-500 transition-colors p-1"><X size={18}/></button>
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-5">
+        <div className="flex-1 overflow-y-auto p-4 md:p-6">
 
           {/* STEP: SOURCE SELECTION */}
           {step==="source"&&(
             <div className="space-y-6">
               <p className="text-[10px] text-gray-400 uppercase tracking-[0.3em] font-black">Choose Data Protocol</p>
-              <div className="grid grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
                 <button onClick={()=>{setStep("classroom");fetchClassroomMaterials();}}
-                  className="p-6 rounded-[24px] border dark:border-gray-800 border-gray-100 dark:bg-gray-900/40 bg-white hover:border-indigo-500/40 hover:shadow-xl transition-all text-left group">
+                  className="p-5 md:p-6 rounded-[20px] md:rounded-[24px] border dark:border-gray-800 border-gray-100 dark:bg-gray-900/40 bg-white hover:border-indigo-500/40 hover:shadow-xl transition-all text-left group">
                   <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 mb-4 group-hover:scale-110 transition-transform">
                     <GraduationCap size={20} />
                   </div>
@@ -264,7 +250,7 @@ export default function MaterialsModal({isOpen,onClose,userId}:{isOpen:boolean;o
                   <p className="text-[11px] text-gray-400 mt-1 font-medium">Sync materials from external courses</p>
                 </button>
                 <button onClick={()=>setStep("manual")}
-                  className="p-6 rounded-[24px] border dark:border-gray-800 border-gray-100 dark:bg-gray-900/40 bg-white hover:border-purple-500/40 hover:shadow-xl transition-all text-left group">
+                  className="p-5 md:p-6 rounded-[20px] md:rounded-[24px] border dark:border-gray-800 border-gray-100 dark:bg-gray-900/40 bg-white hover:border-purple-500/40 hover:shadow-xl transition-all text-left group">
                   <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-500 mb-4 group-hover:scale-110 transition-transform">
                     <PenLine size={20} />
                   </div>
@@ -283,57 +269,44 @@ export default function MaterialsModal({isOpen,onClose,userId}:{isOpen:boolean;o
           {/* STEP: CLASSROOM */}
           {step==="classroom"&&(
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
-                  <button onClick={()=>{setStep("source");setActiveCourse(null);}} className="text-white/30 hover:text-white/60"><ChevronLeft size={14}/></button>
-                  <p className="text-[10px] text-white/30 uppercase tracking-wider font-semibold">Google Classroom</p>
+                  <button onClick={()=>{setStep("source");setActiveCourse(null);}} className="text-gray-400 hover:text-white p-1"><ChevronLeft size={16}/></button>
+                  <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Google Classroom</p>
                 </div>
-                <div className="text-right">
-                  <p className="text-[8px] text-white/30 mb-1">
+                <div className="flex flex-col items-end gap-1">
+                  <p className="text-[8px] text-gray-500">
                     OAuth: {(process.env.NEXT_PUBLIC_CLASSROOM_CLIENT_ID?.trim() || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID?.trim())?.endsWith('.apps.googleusercontent.com') ? <span className="text-emerald-400">Configured</span> : <span className="text-red-400">Missing/Invalid</span>}
                   </p>
                   <button onClick={() => {
                     let clientId = process.env.NEXT_PUBLIC_CLASSROOM_CLIENT_ID?.trim();
-                    if (!clientId) {
-                      clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID?.trim();
-                    }
-                    if (!clientId || !clientId.endsWith(".apps.googleusercontent.com")) {
-                      setClassroomError("No valid Google OAuth client ID found. Set NEXT_PUBLIC_CLASSROOM_CLIENT_ID or NEXT_PUBLIC_GOOGLE_CLIENT_ID in frontend/.env.local and restart npm dev.");
-                      return;
-                    }
+                    if (!clientId) clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID?.trim();
+                    if (!clientId || !clientId.endsWith(".apps.googleusercontent.com")) { setClassroomError("No valid Google OAuth client ID found."); return; }
                     setClassroomError("");
-                    console.log("Using Classroom Client ID:", clientId.substring(0, 5) + "..." + clientId.slice(-25));
-                  const redirectUri = `${window.location.origin}/auth/callback`;
-                  const params = new URLSearchParams({ client_id: clientId, redirect_uri: redirectUri, response_type: "token", scope: "https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.coursework.me.readonly https://www.googleapis.com/auth/classroom.courseworkmaterials.readonly https://www.googleapis.com/auth/drive.readonly", prompt: "consent" });
-                  const popup = window.open(`https://accounts.google.com/o/oauth2/v2/auth?${params}`, "classroom-auth", `width=500,height=600`);
-                  if (!popup) { alert("Popup blocked"); return; }
-                  const handler = async (event: MessageEvent) => {
-                    if (event.origin !== window.location.origin) return;
-                    if (event.data?.type === "GOOGLE_AUTH_SUCCESS" && event.data?.accessToken) {
-                      window.removeEventListener("message", handler);
-                      if (userId) {
-                        await fetch(`${API_BASE}/api/classroom/${encodeURIComponent(userId)}/token`, { 
-                          method: "POST", 
-                          headers: { "Content-Type": "application/json" }, 
-                          body: JSON.stringify({ access_token: event.data.accessToken }) 
-                        });
+                    const redirectUri = `${window.location.origin}/auth/callback`;
+                    const params = new URLSearchParams({ client_id: clientId, redirect_uri: redirectUri, response_type: "token", scope: "https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.coursework.me.readonly https://www.googleapis.com/auth/classroom.courseworkmaterials.readonly https://www.googleapis.com/auth/drive.readonly", prompt: "consent" });
+                    const popup = window.open(`https://accounts.google.com/o/oauth2/v2/auth?${params}`, "classroom-auth", `width=500,height=600`);
+                    if (!popup) { alert("Popup blocked"); return; }
+                    const handler = async (event: MessageEvent) => {
+                      if (event.origin !== window.location.origin) return;
+                      if (event.data?.type === "GOOGLE_AUTH_SUCCESS" && event.data?.accessToken) {
+                        window.removeEventListener("message", handler);
+                        if (userId) await fetch(`${API_BASE}/api/classroom/${encodeURIComponent(userId)}/token`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ access_token: event.data.accessToken }) });
+                        alert("Successfully reconnected."); fetchClassroomMaterials();
                       }
-                      alert("Successfully reconnected with Drive access. You can now extract materials.");
-                      fetchClassroomMaterials();
-                    }
-                  };
-                  window.addEventListener("message", handler);
-                }} className="text-[9px] px-2 py-1 bg-amber-400/10 text-amber-400 border border-amber-400/20 rounded hover:bg-amber-400/20 transition-colors">
-                  Reconnect Google Classroom + Drive
+                    };
+                    window.addEventListener("message", handler);
+                  }} className="text-[9px] px-2 py-1 bg-amber-400/10 text-amber-400 border border-amber-400/20 rounded hover:bg-amber-400/20 transition-colors">
+                    Reconnect Google
                   </button>
                 </div>
               </div>
 
-              {classroomLoading&&<div className="py-12 text-center"><Loader2 size={18} className="animate-spin text-emerald-400 mx-auto mb-2"/><p className="text-[10px] text-white/30">Fetching courses…</p></div>}
+              {classroomLoading&&<div className="py-12 text-center"><Loader2 size={18} className="animate-spin text-indigo-500 mx-auto mb-2"/><p className="text-[10px] text-gray-400 uppercase tracking-widest">Fetching courses…</p></div>}
               {classroomError&&<div className="p-3 rounded-lg bg-red-400/8 border border-red-400/20 text-[10px] text-red-400"><AlertTriangle size={12} className="inline mr-1"/>{classroomError}</div>}
 
-              {!classroomLoading&&!classroomError&&courses.length===0&&!classroomLoading&&(
-                <div className="py-12 text-center"><GraduationCap size={24} className="mx-auto mb-2 text-white/15"/><p className="text-[10px] text-white/30">No active courses found</p></div>
+              {!classroomLoading&&!classroomError&&courses.length===0&&(
+                <div className="py-12 text-center"><GraduationCap size={24} className="mx-auto mb-2 opacity-10"/><p className="text-[10px] text-gray-400 uppercase tracking-widest">No active courses found</p></div>
               )}
 
               {/* Course list */}
@@ -346,12 +319,12 @@ export default function MaterialsModal({isOpen,onClose,userId}:{isOpen:boolean;o
                         <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500">
                            <GraduationCap size={18} />
                         </div>
-                        <div>
-                          <p className="text-sm font-display font-bold dark:text-white text-gray-800">{c.courseName}</p>
-                          <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">{c.materials.length} node{c.materials.length!==1?"s":""}{c.section?` · ${c.section}`:""}</p>
+                        <div className="min-w-0 pr-2">
+                          <p className="text-xs md:text-sm font-display font-bold dark:text-white text-gray-800 line-clamp-2 break-words leading-tight">{c.courseName}</p>
+                          <p className="text-[9px] md:text-[10px] text-gray-400 font-medium uppercase tracking-widest mt-1">{c.materials.length} node{c.materials.length!==1?"s":""}</p>
                         </div>
                       </div>
-                      <ChevronRight size={14} className="text-gray-300 group-hover:text-indigo-500 group-hover:translate-x-1 transition-all"/>
+                      <ChevronRight size={14} className="text-gray-300 group-hover:text-indigo-500 shrink-0"/>
                     </button>
                   ))}
                 </div>
@@ -359,26 +332,25 @@ export default function MaterialsModal({isOpen,onClose,userId}:{isOpen:boolean;o
 
               {/* Materials in selected course */}
               {activeCourse&&courseData&&(
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <div className="flex items-center gap-2">
-                    <button onClick={()=>setActiveCourse(null)} className="text-white/30 hover:text-white/60"><ChevronLeft size={12}/></button>
-                    <p className="text-xs font-medium text-white/70">{courseData.courseName}</p>
+                    <button onClick={()=>setActiveCourse(null)} className="text-gray-400 hover:text-white p-1"><ChevronLeft size={16}/></button>
+                    <p className="text-xs font-bold text-gray-800 dark:text-gray-200">{courseData.courseName}</p>
                   </div>
 
                   {courseData.materials.length===0?(
-                    <p className="text-[10px] text-gray-400 py-12 text-center uppercase tracking-widest font-bold">No active nodes found in course</p>
+                    <p className="text-[10px] text-gray-400 py-12 text-center uppercase tracking-widest font-bold">No active nodes found</p>
                   ):(
                     <>
-                      <div className="space-y-2">
+                      <div className="space-y-2 max-h-[40vh] overflow-y-auto pr-2 styled-scrollbar">
                         {courseData.materials.map((m,i)=>(
                           <div key={i} onClick={()=>toggleCm(i)}
-                            className={`flex items-start gap-3.5 p-4 rounded-2xl border cursor-pointer transition-all ${classroomSelected.has(i)?"border-indigo-500/40 bg-indigo-500/5":"dark:border-gray-800 border-gray-100 dark:bg-gray-900/40 bg-white hover:bg-gray-50 dark:hover:bg-gray-800/60"}`}>
+                            className={`flex items-start gap-3.5 p-4 rounded-xl border cursor-pointer transition-all ${classroomSelected.has(i)?"border-indigo-500/40 bg-indigo-500/5":"dark:border-gray-800 border-gray-100 dark:bg-gray-900/40 bg-white hover:bg-gray-50 dark:hover:bg-gray-800/60"}`}>
                             {classroomSelected.has(i)?<CheckSquare size={16} className="text-indigo-500 shrink-0"/>:<Square size={16} className="text-gray-300 shrink-0"/>}
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm dark:text-gray-200 text-gray-800 font-bold truncate font-display">{m.title}</p>
+                            <div className="flex-1 min-w-0 pr-2">
+                              <p className="text-xs md:text-sm dark:text-gray-200 text-gray-800 font-bold line-clamp-2 break-words leading-tight font-display">{m.title}</p>
                               <div className="flex flex-wrap items-center gap-2 mt-1.5">
                                 <span className="text-[9px] text-gray-400 font-black uppercase tracking-widest px-2 py-0.5 rounded-lg bg-gray-100 dark:bg-gray-800">{m.type}</span>
-                                {m.content_type&&m.content_type!=="unknown"&&<span className="text-[9px] text-indigo-500 font-black uppercase tracking-widest">{m.content_type}</span>}
                                 {m.topicName&&<span className="text-[9px] text-gray-400 font-bold border dark:border-gray-700 border-gray-200 px-2 py-0.5 rounded-lg truncate max-w-[120px]">{m.topicName}</span>}
                               </div>
                             </div>
@@ -386,31 +358,12 @@ export default function MaterialsModal({isOpen,onClose,userId}:{isOpen:boolean;o
                           </div>
                         ))}
                       </div>
-                      <div className="flex gap-3">
-                        <button onClick={handleImportSelected} disabled={classroomSelected.size===0||importing}
-                          className="flex-1 py-3.5 bg-indigo-500 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-indigo-600 shadow-lg shadow-indigo-500/20 disabled:opacity-40 transition-all">
-                          {importing?"Synchronizing…":`Import ${classroomSelected.size} Selected Nodes`}
-                        </button>
-                      </div>
-                      <p className="text-[9px] text-white/20 leading-relaxed">Imported materials will be metadata-only. Click Auto-Extract in the Saved Materials view to enable AI analysis.</p>
+                      <button onClick={handleImportSelected} disabled={classroomSelected.size===0||importing}
+                        className="w-full py-4 bg-indigo-500 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-indigo-600 shadow-lg shadow-indigo-500/20 disabled:opacity-40 transition-all">
+                        {importing?"Synchronizing…":`Import ${classroomSelected.size} Selected Nodes`}
+                      </button>
                     </>
                   )}
-                  
-                  {/* Debug Panel */}
-                  <div className="mt-6 pt-4 border-t border-white/10">
-                    <div className="flex items-center justify-between mb-2">
-                      <p className="text-[10px] text-white/40 font-mono">DEBUG: Course Data (Real-time)</p>
-                      <button onClick={async () => {
-                        try {
-                          const r = await fetch(`${API_BASE}/api/classroom/${userId}/materials/debug`);
-                          const d = await r.json();
-                          if (d.counts) {
-                            alert(JSON.stringify(d.counts.find((c:{courseId:string}) => c.courseId === activeCourse), null, 2));
-                          }
-                        } catch { alert("Debug fetch failed"); }
-                      }} className="text-[9px] text-emerald-400 hover:underline">Show Counts Json</button>
-                    </div>
-                  </div>
                 </div>
               )}
             </div>
@@ -420,13 +373,13 @@ export default function MaterialsModal({isOpen,onClose,userId}:{isOpen:boolean;o
           {step==="manual"&&(
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <button onClick={()=>setStep("source")} className="text-white/30 hover:text-white/60"><ChevronLeft size={14}/></button>
-                <p className="text-[10px] text-white/30 uppercase tracking-wider font-semibold">Add Manual Notes</p>
+                <button onClick={()=>setStep("source")} className="text-gray-400 hover:text-white p-1"><ChevronLeft size={16}/></button>
+                <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Add Manual Notes</p>
               </div>
               <div className="space-y-4">
-                <input value={noteTitle} onChange={e=>setNoteTitle(e.target.value)} placeholder="Node Title (e.g., Quantum Mechanics — Ch. 4)"
+                <input value={noteTitle} onChange={e=>setNoteTitle(e.target.value)} placeholder="Node Title"
                   className="w-full dark:bg-gray-900 bg-gray-50 border dark:border-gray-800 border-gray-100 rounded-2xl px-5 py-4 text-sm font-bold dark:text-white text-gray-800 placeholder-gray-400 focus:outline-none focus:border-indigo-500/50 transition-all"/>
-                <textarea value={noteContent} onChange={e=>setNoteContent(e.target.value)} placeholder="Inject raw research data or personal study notes here…"
+                <textarea value={noteContent} onChange={e=>setNoteContent(e.target.value)} placeholder="Inject research data here…"
                   className="w-full dark:bg-gray-900 bg-gray-50 border dark:border-gray-800 border-gray-100 rounded-2xl px-5 py-4 text-sm font-medium dark:text-gray-300 text-gray-600 placeholder-gray-400 focus:outline-none focus:border-indigo-500/50 h-56 resize-none transition-all styled-scrollbar"/>
                 <button onClick={handleSaveManual} disabled={saving||!noteTitle||!noteContent}
                   className="w-full py-4 bg-indigo-500 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-indigo-600 shadow-lg shadow-indigo-500/20 disabled:opacity-40 transition-all flex items-center justify-center gap-2">
@@ -438,109 +391,78 @@ export default function MaterialsModal({isOpen,onClose,userId}:{isOpen:boolean;o
 
           {/* STEP: BROWSE SAVED */}
           {step==="browse"&&(
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
+            <div className="space-y-4">
                 <div className="flex items-center gap-2">
-                  <button onClick={()=>setStep("source")} className="text-white/30 hover:text-white/60"><ChevronLeft size={14}/></button>
-                  <p className="text-[10px] text-white/30 uppercase tracking-wider font-semibold">Saved Materials ({materials.length})</p>
+                  <button onClick={()=>setStep("source")} className="text-gray-400 hover:text-white p-1"><ChevronLeft size={16}/></button>
+                  <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Saved Materials ({materials.length})</p>
                 </div>
-              </div>
 
-              {materialsError && (
-                <div className="p-3 rounded-xl bg-red-400/8 border border-red-400/20 text-[10px] text-red-400 mb-2">
-                  <AlertTriangle size={12} className="inline mr-1"/>{materialsError}
-                </div>
-              )}
+                {materialsError && (
+                  <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-[10px] text-red-500 font-bold flex items-center gap-2">
+                    <AlertTriangle size={14} /> {materialsError}
+                  </div>
+                )}
 
               {materials.length===0?(
-                <div className="text-center py-12"><BookOpen size={24} className="mx-auto mb-2 text-white/10"/><p className="text-[10px] text-white/30">No materials saved yet</p></div>
+                <div className="text-center py-12"><BookOpen size={24} className="mx-auto mb-2 opacity-10"/><p className="text-[10px] text-gray-400 uppercase tracking-widest">No materials saved yet</p></div>
               ):(
                 <>
-                  <p className="text-[9px] text-white/25">Select materials then go to Ask AI.</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto pr-2 styled-scrollbar">
                     {materials.map(m=>(
                       <div key={m.id} onClick={()=>toggle(m.id)}
-                        className={`p-3 rounded-xl border cursor-pointer transition-all group relative ${selected.has(m.id)?"border-emerald-400/40 bg-emerald-400/5":"border-white/6 bg-white/2 hover:bg-white/4"}`}>
+                        className={`p-4 rounded-xl border cursor-pointer transition-all group relative ${selected.has(m.id)?"border-emerald-400/40 bg-emerald-400/5":"dark:border-gray-800 border-gray-100 dark:bg-gray-900/40 bg-white hover:bg-gray-50 dark:hover:bg-gray-800/60"}`}>
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex items-center gap-2 min-w-0">
-                            {selected.has(m.id)?<CheckSquare size={12} className="text-emerald-400 shrink-0"/>:<Square size={12} className="text-white/20 shrink-0"/>}
-                            <p className="text-[11px] text-white/75 font-medium truncate">{m.title}</p>
+                            {selected.has(m.id)?<CheckSquare size={14} className="text-emerald-400 shrink-0"/>:<Square size={14} className="text-gray-400 shrink-0"/>}
+                            <p className="text-[11px] font-bold dark:text-gray-200 text-gray-800 truncate font-display">{m.title}</p>
                           </div>
-                          <button onClick={e=>{e.stopPropagation();handleDelete(m.id);}} className="opacity-0 group-hover:opacity-100 text-white/20 hover:text-red-400 transition-all shrink-0"><Trash2 size={11}/></button>
+                          <button onClick={e=>{e.stopPropagation();handleDelete(m.id);}} className="text-gray-400 hover:text-red-500 transition-colors p-1"><Trash2 size={12}/></button>
                         </div>
-                        <div className="flex flex-wrap items-center gap-1.5 mt-1.5 pl-5">
-                          <span className="text-[8px] px-1.5 py-px rounded bg-white/5 text-white/25">{m.source==="classroom"?"Classroom":"Manual"}</span>
-                          {m.courseName&&<span className="text-[8px] text-white/20 truncate max-w-[80px]">{m.courseName}</span>}
-                          {m.topicName&&<span className="text-[8px] text-white/40 border border-white/10 px-1 rounded truncate max-w-[80px]">{m.topicName}</span>}
-                          
-                          {/* Content Status Badges */}
-                          {m.content_status==="ready"&&<span className="text-[8px] px-1.5 py-px rounded bg-emerald-400/10 text-emerald-400 border border-emerald-400/20">Ready</span>}
-                          {m.content_status==="metadata_only"&&<span className="text-[8px] px-1.5 py-px rounded bg-amber-400/10 text-amber-400 border border-amber-400/20">Metadata Only</span>}
-                          {m.content_status==="extract_failed"&&<span className="text-[8px] px-1.5 py-px rounded bg-red-400/10 text-red-400 border border-red-400/20">Extract Failed</span>}
-                          
-                          {/* Extract Action for Drive Files */}
-                          {m.source==="classroom" && (!m.content_status || m.content_status!=="ready") && m.driveFileId && (
-                            <button onClick={(e)=>{e.stopPropagation(); handleExtractContent(m.id, m.driveFileId!, m.mimeType || m.content_type || "");}} disabled={extractingId===m.id}
-                              className="text-[8px] text-emerald-400/80 hover:text-emerald-400 hover:underline flex items-center gap-1 ml-auto">
-                              {extractingId===m.id ? <><Loader2 size={8} className="animate-spin"/> Extracting...</> : "Auto-Extract"}
-                            </button>
-                          )}
-                          
-                          {/* Paste Action for Links/Unknowns */}
-                          {m.source==="classroom" && (!m.content_status || m.content_status!=="ready") && !m.driveFileId && (
-                            <button onClick={evt=>{evt.stopPropagation();setPasteTarget(m.id);setPasteText("");}}
-                              className="text-[8px] text-amber-400 hover:underline ml-auto">+ Paste Content</button>
-                          )}
-                        </div>
-                        
-                        {/* Debug Info */}
-                        <div className="mt-1.5 pl-5 flex items-center justify-between gap-2">
-                          <p className="text-[7px] text-white/10 font-mono">
-                            debug: status={m.content_status||'none'} | type={m.content_type||'unknown'} | driveId={m.driveFileId?'yes':'no'} | mime={m.mimeType?.split('/')[1]||m.mimeType||'none'}
-                          </p>
-                          {m.source==="classroom" && (!m.content_status || m.content_status!=="ready") && m.driveFileId && (
-                            <button onClick={(e) => { e.stopPropagation(); handleDebugDrive(m.id, m.driveFileId!); }}
-                              className="text-[7px] text-cyan-400/80 hover:text-cyan-400 hover:underline">
-                              Debug Drive Access
-                            </button>
-                          )}
-                        </div>
-                        
-                        {driveDebugLogs[m.id] && (
-                          <div className="mt-2 pl-5">
-                            <div className="bg-cyan-900/10 border border-cyan-400/20 rounded p-2 text-[8px] font-mono text-cyan-200/80 whitespace-pre-wrap overflow-hidden">
-                              {driveDebugLogs[m.id].loading ? "Fetching Drive diagnostics..." : JSON.stringify(driveDebugLogs[m.id], null, 2)}
-                            </div>
-                          </div>
-                        )}
-                        
-                        {/* Error Message */}
+
                         {extractErrors[m.id] && (
-                          <div className="mt-1.5 pl-5">
-                            <p className="text-[9px] text-red-400/90">{extractErrors[m.id]}</p>
+                          <p className="text-[8px] text-red-500 font-bold mt-1 ml-6">{extractErrors[m.id]}</p>
+                        )}
+
+                        <div className="flex flex-wrap items-center gap-1.5 mt-2 pl-6">
+                           <span className="text-[8px] px-1.5 py-px rounded bg-gray-100 dark:bg-gray-800 text-gray-400 font-bold uppercase tracking-widest">{m.source}</span>
+                           {m.content_status==="ready"&&<span className="text-[8px] px-1.5 py-px rounded bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 font-bold uppercase">Ready</span>}
+                           {m.source==="classroom" && (!m.content_status || m.content_status!=="ready") && m.driveFileId && (
+                            <button onClick={(e)=>{e.stopPropagation(); handleExtractContent(m.id, m.driveFileId!, m.mimeType || m.content_type || "");}} disabled={extractingId===m.id}
+                              className="text-[8px] text-emerald-500 font-bold uppercase tracking-widest hover:underline ml-auto">
+                              {extractingId===m.id ? "Extracting..." : "Auto-Extract"}
+                            </button>
+                           )}
+                           {m.source==="classroom" && (!m.content_status || m.content_status==="metadata_only") && !m.driveFileId && (
+                            <button onClick={(e)=>{e.stopPropagation(); setPasteTarget(m.id);}}
+                              className="text-[8px] text-amber-500 font-bold uppercase tracking-widest hover:underline ml-auto">
+                              Paste Content
+                            </button>
+                           )}
+                        </div>
+
+                        {pasteTarget === m.id && (
+                          <div className="mt-3 space-y-2" onClick={e=>e.stopPropagation()}>
+                            <textarea 
+                              value={pasteText}
+                              onChange={e=>setPasteText(e.target.value)}
+                              placeholder="Paste text content from this assignment..."
+                              className="w-full p-3 text-[10px] dark:bg-gray-800 bg-gray-50 border dark:border-gray-700 border-gray-200 rounded-xl focus:outline-none h-24 resize-none"
+                            />
+                            <div className="flex gap-2">
+                              <button onClick={handlePasteContent} disabled={pasteSaving||!pasteText.trim()} className="flex-1 py-2 bg-indigo-500 text-white text-[9px] font-black uppercase rounded-lg disabled:opacity-40">
+                                {pasteSaving?"Saving...":"Save Content"}
+                              </button>
+                              <button onClick={()=>setPasteTarget(null)} className="px-3 py-2 text-[9px] font-black uppercase text-gray-400">Cancel</button>
+                            </div>
                           </div>
                         )}
                       </div>
                     ))}
                   </div>
 
-                  {/* Paste content dialog */}
-                  {pasteTarget&&(
-                    <div className="p-3 rounded-xl border border-amber-400/20 bg-amber-400/5 space-y-2">
-                      <p className="text-[10px] text-amber-400 font-medium">Paste text content for: {materials.find(m=>m.id===pasteTarget)?.title}</p>
-                      <textarea value={pasteText} onChange={e=>setPasteText(e.target.value)} placeholder="Paste extracted text here…"
-                        className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder-white/20 focus:outline-none h-28 resize-none"/>
-                      <div className="flex gap-2">
-                        <button onClick={handlePasteContent} disabled={pasteSaving||!pasteText.trim()}
-                          className="px-4 py-1.5 bg-amber-400/20 text-amber-400 text-[10px] font-medium rounded-lg disabled:opacity-40">{pasteSaving?"Saving…":"Save Content"}</button>
-                        <button onClick={()=>setPasteTarget(null)} className="px-4 py-1.5 text-white/30 text-[10px] rounded-lg hover:text-white/60">Cancel</button>
-                      </div>
-                    </div>
-                  )}
-
                   <button onClick={()=>setStep("query")}
-                    className="w-full py-2.5 bg-emerald-400/10 border border-emerald-400/20 rounded-xl text-xs text-emerald-400 font-medium hover:bg-emerald-400/15 transition-colors flex items-center justify-center gap-1.5">
-                    <ChevronRight size={13}/>Ask AI About {selected.size>0?`${selected.size} Selected`:"All"} Materials
+                    className="w-full py-4 bg-indigo-500 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-indigo-600 shadow-lg shadow-indigo-500/20 transition-all flex items-center justify-center gap-2">
+                    <Brain size={14}/>Analyze {selected.size>0?`${selected.size} Selected`:"All"} Materials
                   </button>
                 </>
               )}
@@ -551,75 +473,57 @@ export default function MaterialsModal({isOpen,onClose,userId}:{isOpen:boolean;o
           {step==="query"&&(
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <button onClick={()=>setStep("browse")} className="text-white/30 hover:text-white/60"><ChevronLeft size={14}/></button>
-                <p className="text-[10px] text-white/30 uppercase tracking-wider font-semibold">Ask AI</p>
+                <button onClick={()=>setStep("browse")} className="text-gray-400 hover:text-white p-1"><ChevronLeft size={16}/></button>
+                <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Neural Query</p>
               </div>
 
-              {selected.size>0&&(
-                <div className="px-3 py-2 rounded-lg bg-emerald-400/8 border border-emerald-400/20 text-[10px] text-emerald-400">
-                  Querying {selected.size} material{selected.size>1?"s":""}. <button className="underline" onClick={()=>setSelected(new Set())}>Clear</button>
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <input value={query} onChange={e=>setQuery(e.target.value)} onKeyDown={e=>{if(e.key==="Enter")handleQuery();}}
+                    placeholder="Ask your library..."
+                    className="flex-1 dark:bg-gray-900 bg-gray-50 border dark:border-gray-800 border-gray-100 rounded-2xl px-6 py-4 text-sm font-bold dark:text-white text-gray-800 focus:outline-none focus:border-indigo-500/50 transition-all"/>
+                  <button onClick={()=>handleQuery()} disabled={querying||!query}
+                    className="h-14 px-8 bg-indigo-500 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-indigo-600 shadow-lg shadow-indigo-500/20 disabled:opacity-40 transition-all">Ask AI</button>
                 </div>
-              )}
 
-              <div>
-                <p className="text-[9px] text-white/25 uppercase tracking-wider font-semibold mb-2">Quick Actions</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {ACTIONS.map(a=>(
-                    <button key={a.id} onClick={()=>handleQuery(a.label,a.id)} disabled={querying}
-                      className="px-2.5 py-1.5 bg-white/4 border border-white/8 rounded-lg text-[10px] text-white/45 hover:bg-white/8 hover:text-white/75 disabled:opacity-30 transition-colors">{a.label}</button>
+                <div className="flex flex-wrap gap-2">
+                  {ACTIONS.map(action => (
+                    <button 
+                      key={action.id}
+                      onClick={() => handleQuery(action.label, action.id)}
+                      disabled={querying}
+                      className="px-4 py-2 rounded-xl border dark:border-gray-800 border-gray-100 dark:bg-gray-900/40 bg-white hover:border-indigo-500/30 hover:bg-indigo-500/5 text-[9px] font-black uppercase tracking-widest text-gray-400 hover:text-indigo-500 transition-all disabled:opacity-40"
+                    >
+                      {action.label}
+                    </button>
                   ))}
                 </div>
-              </div>
 
-              <div className="flex gap-3">
-                <input value={query} onChange={e=>setQuery(e.target.value)} onKeyDown={e=>{if(e.key==="Enter")handleQuery();}}
-                  placeholder="Ask a question about your research library…"
-                  className="flex-1 dark:bg-gray-900 bg-gray-50 border dark:border-gray-800 border-gray-100 rounded-2xl px-6 py-4 text-sm font-bold dark:text-white text-gray-800 placeholder-gray-400 focus:outline-none focus:border-indigo-500/50 transition-all"/>
-                <button onClick={()=>handleQuery()} disabled={querying||!query}
-                  className="px-8 bg-indigo-500 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-indigo-600 shadow-lg shadow-indigo-500/20 disabled:opacity-40 transition-all">Ask AI</button>
-              </div>
-
-              <div className="min-h-[300px] dark:bg-gray-900/60 bg-gray-50 border dark:border-gray-800 border-gray-100 rounded-[32px] p-8 overflow-y-auto max-h-[60vh] flex flex-col shadow-inner">
-                {querying?(
-                  <div className="h-full flex-1 flex flex-col items-center justify-center text-indigo-500 text-xs gap-4">
-                    <div className="flex items-center font-black uppercase tracking-widest"><Loader2 size={16} className="animate-spin mr-3"/>{queryProgress}</div>
-                    <button onClick={() => abortController?.abort()} className="px-5 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-indigo-500 hover:bg-indigo-500 hover:text-white transition-all text-[10px] font-black uppercase tracking-widest">Cancel Query</button>
-                  </div>
-                ):result?(
-                  <div className="flex-1 flex flex-col">
-                    <div className="flex justify-between items-center mb-6 gap-3 pb-4 border-b dark:border-gray-800 border-gray-100">
-                        <div className="flex flex-wrap gap-2">
-                            {result.fallback_used&&<div className="px-3 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-[9px] font-black uppercase tracking-widest text-amber-500">Local Cache</div>}
-                            {result.action_type&&<div className="px-3 py-1 rounded-lg bg-purple-500/10 border border-purple-500/20 text-[9px] font-black uppercase tracking-widest text-purple-500">{result.action_type}</div>}
-                            {result.confidence!==undefined&&<div className="px-3 py-1 rounded-lg dark:bg-gray-800 bg-white border dark:border-gray-700 border-gray-200 text-[9px] font-black uppercase tracking-widest text-gray-400">Confidence: {Math.round(result.confidence*100)}%</div>}
-                        </div>
-                        <button onClick={() => navigator.clipboard.writeText(result.answer || "")} className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-indigo-500 transition-colors flex items-center gap-2">
-                          Copy Insight
-                        </button>
+                <div className="min-h-[300px] dark:bg-gray-900/60 bg-gray-50 border dark:border-gray-800 border-gray-100 rounded-[24px] md:rounded-[32px] p-6 md:p-8 overflow-y-auto max-h-[50vh] flex flex-col shadow-inner">
+                  {querying?(
+                    <div className="flex-1 flex flex-col items-center justify-center text-indigo-500 text-[10px] font-black uppercase tracking-[0.2em] gap-4">
+                      <Loader2 size={24} className="animate-spin mb-2"/>
+                      {queryProgress}
+                      <button 
+                        onClick={() => abortController?.abort()}
+                        className="mt-4 px-6 py-2 border border-indigo-500/30 rounded-xl hover:bg-indigo-500/10 transition-colors text-[8px]"
+                      >
+                        Cancel Query
+                      </button>
                     </div>
-                    {result.missing_content_materials&&result.missing_content_materials.length>0&&(
-                      <div className="mb-6 px-5 py-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-[11px] text-amber-600 font-medium leading-relaxed">
-                        <AlertTriangle size={14} className="inline mr-2 -mt-1"/>{result.missing_content_materials.length} nodes are missing raw data. <button className="underline font-bold hover:text-amber-700 transition-colors" onClick={()=>setStep("browse")}>Auto-Extract Now</button>
+                  ):result?(
+                    <div className="flex-1">
+                      <div className="prose prose-sm dark:prose-invert max-w-none">
+                          <ReactMarkdown remarkPlugins={[remarkGfm]} components={md}>{String(result.answer||"")}</ReactMarkdown>
                       </div>
-                    )}
-                    <div className="flex-1 prose prose-indigo max-w-none">
-                        <ReactMarkdown remarkPlugins={[remarkGfm]} components={md}>{String(result.answer||"")}</ReactMarkdown>
                     </div>
-                    {result.sources&&result.sources.length>0&&(
-                      <div className="mt-8 pt-6 border-t dark:border-gray-800 border-gray-100">
-                        <p className="text-[10px] text-gray-400 uppercase tracking-[0.2em] mb-3 font-black">Sources Cited</p>
-                        <div className="flex flex-wrap gap-2">{result.sources.map((s,i)=><span key={i} className="px-3 py-1 bg-indigo-500/5 border border-indigo-500/20 rounded-lg text-[9px] font-bold text-indigo-500 uppercase tracking-widest">{s}</span>)}</div>
-                      </div>
-                    )}
-                  </div>
-                ):(
-                  <div className="h-full flex-1 flex flex-col items-center justify-center text-gray-300 gap-4">
-                    <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                      <FileText size={24} className="opacity-20" />
+                  ):(
+                    <div className="flex-1 flex flex-col items-center justify-center opacity-10">
+                      <Brain size={48} className="mb-4" />
+                      <p className="text-[10px] font-black uppercase tracking-[0.4em]">Ready for protocol</p>
                     </div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.4em]">Awaiting Query Initialization</p>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           )}

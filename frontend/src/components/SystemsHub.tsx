@@ -26,18 +26,18 @@ export default function SystemsHub({ onNav, onAction }: SystemsHubProps) {
   ];
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto styled-scrollbar px-10 py-16 dark:bg-[#0A0A0B] bg-white transition-colors">
+    <div className="flex flex-col h-full overflow-y-auto styled-scrollbar px-6 md:px-10 py-10 md:py-16 dark:bg-[#0A0A0B] bg-white transition-colors">
       <div className="max-w-6xl mx-auto w-full space-y-12">
         <header>
-          <h1 className="font-display text-5xl tracking-tight dark:text-white text-[#111827]">
+          <h1 className="font-display text-4xl md:text-5xl tracking-tight dark:text-white text-[#111827]">
             Explore <span className="text-[#0052FF]">Hub.</span>
           </h1>
-          <p className="text-gray-400 font-medium text-lg mt-2">
+          <p className="text-gray-400 font-medium text-base md:text-lg mt-2">
             Access all features and tools to manage your learning.
           </p>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
           {systems.map((s, i) => {
              const colorMap: Record<string, string> = {
                indigo: "text-indigo-500 bg-indigo-500/10 border-indigo-500/20 hover:border-indigo-500/50 hover:shadow-indigo-500/5",
@@ -58,17 +58,17 @@ export default function SystemsHub({ onNav, onAction }: SystemsHubProps) {
                 animate={{ opacity: 1, y: 0 }}
                 whileHover={{ y: -2, scale: 1.01 }}
                 transition={{ delay: i * 0.04 }}
-                className={`p-6 border rounded-[28px] text-left transition-all group flex items-center gap-5 dark:bg-gray-900/40 bg-white border-gray-100 shadow-sm ${theme}`}
+                className={`p-5 md:p-6 border rounded-[28px] text-left transition-all group flex items-center gap-4 md:gap-5 dark:bg-gray-900/40 bg-white border-gray-100 shadow-sm ${theme}`}
               >
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-white/5 group-hover:scale-110 transition-transform shadow-inner">
-                  <s.icon size={22} />
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl flex items-center justify-center shrink-0 bg-white/5 group-hover:scale-110 transition-transform shadow-inner">
+                  <s.icon size={20} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <h4 className="font-display text-sm font-bold tracking-tight dark:text-white text-[#111827] group-hover:text-indigo-500 transition-colors">{s.label}</h4>
-                    <ChevronRight size={14} className="opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0" />
+                    <h4 className="font-display text-xs md:text-sm font-bold tracking-tight dark:text-white text-[#111827] group-hover:text-indigo-500 transition-colors">{s.label}</h4>
+                    <ChevronRight size={14} className="hidden sm:block opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0" />
                   </div>
-                  <p className="text-[11px] text-gray-400 font-medium mt-0.5 truncate">{s.desc}</p>
+                  <p className="text-[10px] md:text-[11px] text-gray-400 font-medium mt-0.5 truncate">{s.desc}</p>
                 </div>
               </motion.button>
              );
@@ -76,13 +76,12 @@ export default function SystemsHub({ onNav, onAction }: SystemsHubProps) {
         </div>
 
         {/* ── Status Section ── */}
-        <section className="pt-12 border-t dark:border-gray-800 border-gray-100">
-        <section className="pt-8">
+        <section className="pt-8 border-t dark:border-gray-800 border-gray-100">
            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="p-6 rounded-[28px] border space-y-4 dark:bg-gray-900/50 dark:border-gray-800 bg-white border-gray-100 shadow-sm hover:shadow-md transition-shadow">
                  <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-                      <Activity size={16} className="text-emerald-500" />
+                       <Activity size={16} className="text-emerald-500" />
                     </div>
                     <span className="text-[10px] font-black uppercase tracking-[0.2em] dark:text-gray-400 text-gray-600">Core Stability</span>
                  </div>
@@ -100,7 +99,7 @@ export default function SystemsHub({ onNav, onAction }: SystemsHubProps) {
               <div className="p-6 rounded-[28px] border space-y-4 dark:bg-gray-900/50 dark:border-gray-800 bg-white border-gray-100 shadow-sm hover:shadow-md transition-shadow">
                  <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
-                      <Globe size={16} className="text-indigo-500" />
+                       <Globe size={16} className="text-indigo-500" />
                     </div>
                     <span className="text-[10px] font-black uppercase tracking-[0.2em] dark:text-gray-400 text-gray-600">Cloud Nodes</span>
                  </div>
@@ -112,7 +111,7 @@ export default function SystemsHub({ onNav, onAction }: SystemsHubProps) {
 
               <div className="p-6 rounded-[28px] bg-gradient-to-br from-indigo-600 to-violet-600 text-white space-y-4 shadow-xl shadow-indigo-500/20 relative overflow-hidden group">
                  <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-125 transition-transform">
-                   <Sparkles size={64} />
+                    <Sparkles size={64} />
                  </div>
                  <div className="relative z-10 space-y-3">
                     <div className="flex items-center gap-3">
@@ -127,7 +126,6 @@ export default function SystemsHub({ onNav, onAction }: SystemsHubProps) {
                  </div>
               </div>
            </div>
-        </section>
         </section>
       </div>
     </div>

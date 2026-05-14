@@ -171,25 +171,25 @@ export default function SettingsPanel({ onProfileUpdate }: { onProfileUpdate?: (
   const initials = editName.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2);
 
   return (
-    <div className="flex h-full overflow-hidden transition-colors dark:bg-[#0A0A0B] bg-white text-gray-500">
+    <div className="flex flex-col lg:flex-row h-full overflow-hidden transition-colors dark:bg-[#0A0A0B] bg-white text-gray-500">
       {/* ── Sub-Sidebar ── */}
-      <aside className="w-64 border-r flex flex-col p-6 space-y-1 shrink-0 dark:bg-[#111112] dark:border-gray-800 border-gray-100">
-        <p className="px-4 py-3 text-[9px] font-black text-gray-400 uppercase tracking-[0.4em] mb-2">Configuration</p>
+      <aside className="w-full lg:w-64 border-b lg:border-r flex flex-row lg:flex-col p-4 lg:p-6 gap-2 lg:space-y-1 shrink-0 dark:bg-[#111112] dark:border-gray-800 border-gray-100 overflow-x-auto lg:overflow-x-visible no-scrollbar">
+        <p className="hidden lg:block px-4 py-3 text-[9px] font-black text-gray-400 uppercase tracking-[0.4em] mb-2">Configuration</p>
         {sections.map((s) => (
           <button
             key={s.id}
             onClick={() => setActiveSection(s.id)}
-            className={`w-full flex items-center gap-3.5 px-5 py-3 rounded-2xl transition-all duration-300 ${activeSection === s.id
+            className={`flex-1 lg:flex-none flex items-center justify-center lg:justify-start gap-2.5 md:gap-3.5 px-4 md:px-5 py-3 md:py-3.5 rounded-xl md:rounded-2xl transition-all duration-300 shrink-0 ${activeSection === s.id
                 ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/20 ring-1 ring-white/10"
                 : "text-gray-400 hover:text-indigo-500 hover:bg-indigo-50/50 dark:hover:bg-indigo-500/10"
               }`}
           >
             <s.icon size={16} className={activeSection === s.id ? "text-white" : "group-hover:scale-110 transition-transform"} />
-            <span className="text-[10px] font-display font-bold uppercase tracking-[0.1em]">{s.label}</span>
+            <span className="text-[9px] md:text-[10px] font-display font-bold uppercase tracking-[0.1em] whitespace-nowrap">{s.label}</span>
           </button>
         ))}
 
-        <div className="mt-auto pt-6 border-t dark:border-gray-800 border-gray-100">
+        <div className="hidden lg:block mt-auto pt-6 border-t dark:border-gray-800 border-gray-100">
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all"
@@ -201,25 +201,25 @@ export default function SettingsPanel({ onProfileUpdate }: { onProfileUpdate?: (
       </aside>
 
       {/* ── Main Settings Content ── */}
-      <div className="flex-1 overflow-y-auto px-12 py-12 styled-scrollbar">
-        <div className="max-w-2xl space-y-10">
-          <header>
-            <h1 className="font-display text-4xl tracking-tight dark:text-white text-[#111827]">
+      <div className="flex-1 overflow-y-auto px-6 md:px-12 py-8 md:py-12 styled-scrollbar">
+        <div className="max-w-2xl mx-auto space-y-8 md:space-y-10">
+          <header className="space-y-2">
+            <h1 className="font-display text-3xl md:text-4xl tracking-tight dark:text-white text-[#111827]">
               {sections.find(s => s.id === activeSection)?.label} <span className="text-indigo-500">Config.</span>
             </h1>
-            <p className="text-gray-400 font-medium text-xs mt-1 uppercase tracking-widest opacity-80">
-              System Nodes: {activeSection.toUpperCase()} <span aria-hidden="true">{"//"}</span> Management & Core Calibration
+            <p className="text-gray-400 font-medium text-[8px] md:text-xs uppercase tracking-widest opacity-80">
+              System Nodes: {activeSection.toUpperCase()} <span aria-hidden="true">{"//"}</span> Core Calibration
             </p>
           </header>
 
-          <div className="space-y-10">
+          <div className="space-y-8 md:space-y-10">
             {activeSection === "profile" && (
-              <div className="space-y-10">
+              <div className="space-y-8 md:space-y-10">
 
                 {/* Profile Header Card */}
-                <div className="flex items-center gap-8 p-8 border rounded-[40px] dark:bg-gray-900/50 dark:border-gray-800 bg-gray-50/50 border-gray-100 backdrop-blur-sm">
+                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 md:gap-8 p-6 md:p-8 border rounded-[32px] md:rounded-[40px] dark:bg-gray-900/50 dark:border-gray-800 bg-gray-50/50 border-gray-100 backdrop-blur-sm text-center sm:text-left">
                   <div className="relative group">
-                    <div className="w-24 h-24 rounded-full border-2 border-white dark:border-gray-800 shadow-2xl flex items-center justify-center overflow-hidden bg-white dark:bg-gray-800 ring-4 ring-indigo-500/5">
+                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-white dark:border-gray-800 shadow-2xl flex items-center justify-center overflow-hidden bg-white dark:bg-gray-800 ring-4 ring-indigo-500/5">
                       {editPicture ? (
                         <img src={editPicture} alt="Avatar" className="w-full h-full object-cover" />
                       ) : (
@@ -228,18 +228,18 @@ export default function SettingsPanel({ onProfileUpdate }: { onProfileUpdate?: (
                     </div>
                     <button
                       onClick={() => fileInputRef.current?.click()}
-                      className="absolute bottom-0 right-0 w-9 h-9 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-all border-2 border-white dark:border-gray-900"
+                      className="absolute bottom-0 right-0 w-8 h-8 md:w-9 md:h-9 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-all border-2 border-white dark:border-gray-900"
                     >
-                      <Camera size={16} />
+                      <Camera size={14} />
                     </button>
                     <input type="file" ref={fileInputRef} onChange={handleImageChange} accept="image/*" className="hidden" />
                   </div>
-                  <div className="space-y-1">
-                    <h3 className="text-xl font-display font-bold dark:text-white text-[#111827]">{editName || "New User"}</h3>
-                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">{editProfession || "Skillo Member"}</p>
-                    <div className="flex gap-3 mt-4">
-                      <div className="px-3 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-[9px] font-black text-indigo-500 uppercase tracking-widest">Pro Protocol</div>
-                      <div className="px-3 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[9px] font-black text-emerald-600 uppercase tracking-widest">Node Active</div>
+                  <div className="space-y-1 flex-1">
+                    <h3 className="text-lg md:text-xl font-display font-bold dark:text-white text-[#111827]">{editName || "New User"}</h3>
+                    <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] md:tracking-[0.3em]">{editProfession || "Skillo Member"}</p>
+                    <div className="flex flex-wrap justify-center sm:justify-start gap-2 md:gap-3 mt-4">
+                      <div className="px-2.5 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-[8px] md:text-[9px] font-black text-indigo-500 uppercase tracking-widest">Pro Protocol</div>
+                      <div className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[8px] md:text-[9px] font-black text-emerald-600 uppercase tracking-widest">Node Active</div>
                     </div>
                   </div>
                 </div>
@@ -248,56 +248,56 @@ export default function SettingsPanel({ onProfileUpdate }: { onProfileUpdate?: (
                 <div className="space-y-6">
                   <h3 className="text-[9px] font-black text-gray-400 uppercase tracking-[0.3em] px-2">Identity & Objectives</h3>
 
-                  <div className="grid grid-cols-1 gap-5">
+                  <div className="grid grid-cols-1 gap-5 md:gap-6">
                     <div className="space-y-2">
-                      <div className="flex items-center gap-2.5 ml-2">
-                        <User size={13} className="text-indigo-500" />
-                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Display Name</label>
+                      <div className="flex items-center gap-2 ml-2">
+                        <User size={12} className="text-indigo-500" />
+                        <label className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Display Name</label>
                       </div>
                       <input
                         value={editName}
                         onChange={(e) => setEditName(e.target.value)}
-                        className="w-full px-6 py-4 rounded-2xl border dark:bg-gray-900/40 dark:border-gray-800 dark:text-white bg-white border-gray-100 outline-none focus:border-indigo-500/50 transition-all font-bold text-sm"
+                        className="w-full px-5 md:px-6 py-3.5 md:py-4 rounded-2xl border dark:bg-gray-900/40 dark:border-gray-800 dark:text-white bg-white border-gray-100 outline-none focus:border-indigo-500/50 transition-all font-bold text-sm"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <div className="flex items-center gap-2.5 ml-2">
-                        <Globe size={13} className="text-indigo-500" />
-                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Profession</label>
+                      <div className="flex items-center gap-2 ml-2">
+                        <Globe size={12} className="text-indigo-500" />
+                        <label className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Profession</label>
                       </div>
                       <input
                         value={editProfession}
                         onChange={(e) => setEditProfession(e.target.value)}
-                        className="w-full px-6 py-4 rounded-2xl border dark:bg-gray-900/40 dark:border-gray-800 dark:text-white bg-white border-gray-100 outline-none focus:border-indigo-500/50 transition-all font-bold text-sm"
+                        className="w-full px-5 md:px-6 py-3.5 md:py-4 rounded-2xl border dark:bg-gray-900/40 dark:border-gray-800 dark:text-white bg-white border-gray-100 outline-none focus:border-indigo-500/50 transition-all font-bold text-sm"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <div className="flex items-center gap-2.5 ml-2">
-                        <Target size={13} className="text-indigo-500" />
-                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Primary Objectives</label>
+                      <div className="flex items-center gap-2 ml-2">
+                        <Target size={12} className="text-indigo-500" />
+                        <label className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Primary Objectives</label>
                       </div>
                       <textarea
                         value={editObjectives}
                         onChange={(e) => setEditObjectives(e.target.value)}
                         rows={3}
                         placeholder="e.g. Master React, Finish semester exams"
-                        className="w-full px-6 py-4 rounded-2xl border dark:bg-gray-900/40 dark:border-gray-800 dark:text-white bg-white border-gray-100 outline-none focus:border-indigo-500/50 transition-all font-bold text-sm resize-none styled-scrollbar"
+                        className="w-full px-5 md:px-6 py-3.5 md:py-4 rounded-2xl border dark:bg-gray-900/40 dark:border-gray-800 dark:text-white bg-white border-gray-100 outline-none focus:border-indigo-500/50 transition-all font-bold text-sm resize-none styled-scrollbar"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <div className="flex items-center gap-2.5 ml-2">
-                        <List size={13} className="text-indigo-500" />
-                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Active Tasks / Goals</label>
+                      <div className="flex items-center gap-2 ml-2">
+                        <List size={12} className="text-indigo-500" />
+                        <label className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Active Tasks / Goals</label>
                       </div>
                       <textarea
                         value={editGoals}
                         onChange={(e) => setEditGoals(e.target.value)}
                         rows={3}
                         placeholder="e.g. Study 4 hours daily, Work on side project"
-                        className="w-full px-6 py-4 rounded-2xl border dark:bg-gray-900/40 dark:border-gray-800 dark:text-white bg-white border-gray-100 outline-none focus:border-indigo-500/50 transition-all font-bold text-sm resize-none styled-scrollbar"
+                        className="w-full px-5 md:px-6 py-3.5 md:py-4 rounded-2xl border dark:bg-gray-900/40 dark:border-gray-800 dark:text-white bg-white border-gray-100 outline-none focus:border-indigo-500/50 transition-all font-bold text-sm resize-none styled-scrollbar"
                       />
                     </div>
                   </div>
@@ -307,7 +307,7 @@ export default function SettingsPanel({ onProfileUpdate }: { onProfileUpdate?: (
                   <button
                     onClick={handleSaveChanges}
                     disabled={isSaving}
-                    className="flex items-center gap-3 px-10 py-4 bg-indigo-500 text-white rounded-2xl font-display font-black text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/20 hover:bg-indigo-600 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
+                    className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 md:px-10 py-4 bg-indigo-500 text-white rounded-2xl font-display font-black text-[10px] md:text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/20 hover:bg-indigo-600 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
                   >
                     {isSaving ? <span className="w-3 h-3 border-2 border-white border-t-transparent animate-spin rounded-full" /> : <Save size={16} />}
                     Sync Profile Nodes
@@ -318,18 +318,18 @@ export default function SettingsPanel({ onProfileUpdate }: { onProfileUpdate?: (
 
             {activeSection === "privacy" && (
               <div className="space-y-6">
-                <div className="p-10 border border-red-500/20 dark:bg-red-500/5 bg-red-50 rounded-[40px] space-y-6">
+                <div className="p-6 md:p-10 border border-red-500/20 dark:bg-red-500/5 bg-red-50 rounded-[32px] md:rounded-[40px] space-y-6">
                   <div className="flex items-center gap-4 text-red-500">
-                    <Shield size={28} />
-                    <h3 className="text-2xl font-display font-bold">Danger Zone</h3>
+                    <Shield size={24} />
+                    <h3 className="text-xl md:text-2xl font-display font-bold">Danger Zone</h3>
                   </div>
-                  <p className="text-xs text-gray-500 font-medium leading-relaxed uppercase tracking-widest opacity-70">
+                  <p className="text-[10px] md:text-xs text-gray-500 font-medium leading-relaxed uppercase tracking-widest opacity-70">
                     Permanently purge your Skillo existence. All neural nodes and data will be liquidated.
                   </p>
                   <button
                     onClick={handleDeleteAccount}
                     disabled={isDeleting}
-                    className="flex items-center gap-3 px-10 py-4 bg-red-500 text-white rounded-2xl font-display font-black text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-red-500/20 hover:bg-red-600 transition-all disabled:opacity-50"
+                    className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 md:px-10 py-4 bg-red-500 text-white rounded-2xl font-display font-black text-[10px] md:text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-red-500/20 hover:bg-red-600 transition-all disabled:opacity-50"
                   >
                     {isDeleting ? "Purging..." : "Liquidate Account"}
                   </button>
@@ -338,9 +338,9 @@ export default function SettingsPanel({ onProfileUpdate }: { onProfileUpdate?: (
             )}
 
             {(activeSection !== "profile" && activeSection !== "privacy") && (
-              <div className="py-20 flex flex-col items-center justify-center border-2 border-dashed border-gray-100 dark:border-gray-800 rounded-[48px] text-gray-300">
-                <Terminal size={48} className="mb-4 opacity-20" />
-                <p className="text-[10px] font-black uppercase tracking-[0.4em]">Feature Coming Soon</p>
+              <div className="py-16 md:py-20 flex flex-col items-center justify-center border-2 border-dashed border-gray-100 dark:border-gray-800 rounded-[32px] md:rounded-[48px] text-gray-300">
+                <Terminal size={40} className="mb-4 opacity-20" />
+                <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em]">Feature Coming Soon</p>
               </div>
             )}
           </div>

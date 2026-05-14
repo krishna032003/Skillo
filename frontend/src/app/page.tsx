@@ -115,7 +115,10 @@ export default function Home() {
   };
 
   const addLog = (agent: string, message: string, isFinal = false) => {
-    setLogs(prev => [...prev, { id: Date.now().toString() + Math.random(), agent, message, timestamp: new Date().toLocaleTimeString(), status: "completed", isFinal } as typeof prev[0]]);
+    setLogs(prev => {
+      const newLogs = [...prev, { id: Date.now().toString() + Math.random(), agent, message, timestamp: new Date().toLocaleTimeString(), status: "completed", isFinal } as typeof prev[0]];
+      return newLogs.slice(-50); // Keep last 50 logs for performance
+    });
   };
 
   const handleCommand = async (commandType: string, label: string) => {

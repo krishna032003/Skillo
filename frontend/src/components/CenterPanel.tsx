@@ -50,32 +50,32 @@ interface EmptyWorkspaceProps {
 
 function EmptyWorkspace({ onAction, onOpenFocus, onOpenMaterials, assignmentsData, totalFocusMinutes, userName }: EmptyWorkspaceProps) {
   return (
-    <div className="flex-1 overflow-y-auto px-10 py-16 space-y-16 max-w-6xl mx-auto w-full">
+    <div className="flex-1 overflow-y-auto px-6 md:px-10 py-10 md:py-16 pb-[160px] md:pb-[200px] space-y-12 md:space-y-16 max-w-6xl mx-auto w-full styled-scrollbar min-h-0">
       
       {/* Hero Header */}
       <div className="space-y-4">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="font-display text-5xl leading-tight dark:text-white text-[#111827]">
+          <h1 className="font-display text-3xl md:text-5xl leading-tight dark:text-white text-[#111827]">
             Hello, <span className="bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">{userName || "Student"}.</span> <br />
             Ready to <span className="italic opacity-80">optimize?</span>
           </h1>
-          <p className="text-gray-400 font-medium text-base mt-4 max-w-lg leading-relaxed">
+          <p className="text-gray-400 font-medium text-sm md:text-base mt-4 max-w-lg leading-relaxed">
             Systems are calibrated and ready. Execute a protocol below to begin.
           </p>
         </motion.div>
       </div>
 
       {/* Quick Metrics */}
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5">
         {[
           { label: "Active Tasks", val: assignmentsData.length || "0", sub: "SYNCED", color: "text-indigo-500" },
           { label: "Focus Duration", val: `${totalFocusMinutes}M`, sub: "WEEKLY", color: "text-emerald-500" },
           { label: "Node Status", val: "ACTIVE", sub: "STABLE", color: "text-purple-500" },
         ].map((m, i) => (
-          <div key={i} className="px-6 py-5 border rounded-2xl transition-all dark:bg-gray-900/50 dark:border-gray-800 bg-white border-gray-100 shadow-sm">
-            <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2">{m.label}</p>
+          <div key={i} className="px-5 md:px-6 py-4 md:py-5 border rounded-2xl transition-all dark:bg-gray-900/50 dark:border-gray-800 bg-white border-gray-100 shadow-sm">
+            <p className="text-[8px] md:text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2">{m.label}</p>
             <div className="flex items-baseline gap-2">
-              <p className={`text-2xl font-black tracking-tight ${m.color}`}>{m.val}</p>
+              <p className="text-xl md:text-2xl font-black tracking-tight text-[#0052FF]">{m.val}</p>
               <span className="text-[8px] font-bold text-gray-400 uppercase tracking-widest">{m.sub}</span>
             </div>
           </div>
@@ -88,7 +88,7 @@ function EmptyWorkspace({ onAction, onOpenFocus, onOpenMaterials, assignmentsDat
            <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">System Protocols</h3>
            <div className="h-[1px] flex-1 dark:bg-gray-800 bg-gray-100" />
         </div>
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {CARDS.map((c, i) => {
             const colorMap: Record<string, { text: string; bg: string; border: string; glow: string }> = {
               indigo: { text: "text-indigo-500", bg: "bg-indigo-500/10", border: "border-indigo-500/20", glow: "hover:border-indigo-500/50 hover:shadow-indigo-500/10" },
@@ -104,17 +104,17 @@ function EmptyWorkspace({ onAction, onOpenFocus, onOpenMaterials, assignmentsDat
                 whileHover={{ y: -2, scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => c.action === "focus" ? onOpenFocus() : c.action === "materials" ? onOpenMaterials() : onAction(c.action, c.cmd)}
-                className={`group p-6 border rounded-3xl text-left transition-all duration-500 flex items-center gap-5 dark:bg-gray-900/40 bg-white shadow-sm hover:shadow-lg ${theme.border} ${theme.glow}`}
+                className={`group p-5 md:p-6 border rounded-3xl text-left transition-all duration-500 flex items-center gap-4 md:gap-5 dark:bg-gray-900/40 bg-white shadow-sm hover:shadow-lg ${theme.border} ${theme.glow}`}
               >
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-500 ${theme.bg} ${theme.text} group-hover:scale-110 shadow-inner`}>
-                  <c.icon size={22} />
+                <div className={`w-10 md:w-12 h-10 md:h-12 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-500 ${theme.bg} ${theme.text} group-hover:scale-110 shadow-inner`}>
+                  <c.icon size={20} />
                 </div>
                 <div className="flex-1 min-w-0">
                    <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-display font-bold tracking-tight dark:text-gray-100 text-gray-800 transition-colors duration-300 group-hover:text-indigo-500">{c.label}</h4>
-                      <ChevronRight size={16} className={`transition-all duration-500 text-gray-300 group-hover:text-indigo-500 group-hover:translate-x-1`} />
+                      <h4 className="text-xs md:text-sm font-display font-bold tracking-tight dark:text-gray-100 text-gray-800 transition-colors duration-300 group-hover:text-indigo-500">{c.label}</h4>
+                      <ChevronRight size={14} className={`transition-all duration-500 text-gray-300 group-hover:text-indigo-500 group-hover:translate-x-1`} />
                    </div>
-                   <p className="text-[11px] text-gray-400 truncate mt-1 font-medium">{c.desc}</p>
+                   <p className="text-[10px] md:text-[11px] text-gray-400 truncate mt-1 font-medium">{c.desc}</p>
                 </div>
               </motion.button>
             );
@@ -132,22 +132,37 @@ export default function CenterPanel({
   userName
 }: CenterPanelProps) {
   const endRef = useRef<HTMLDivElement>(null);
-  useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [chatHistory, finalAnswer]);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    // Smart scroll: only scroll if user is near bottom (within 150px)
+    const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 150;
+    
+    if (isNearBottom || chatHistory.length === 0) {
+      endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+  }, [chatHistory, finalAnswer, isThinking]);
 
   const isEmpty = chatHistory.length === 0 && !finalAnswer;
 
   return (
-    <div className="flex flex-col h-full relative dark:bg-[#0A0A0B] bg-white transition-colors">
+    <div className="flex flex-col h-full relative dark:bg-[#0A0A0B] bg-white transition-colors w-full">
       
       {isEmpty ? (
         <EmptyWorkspace onAction={onAction} onOpenFocus={onOpenFocus} onOpenMaterials={onOpenMaterials} assignmentsData={assignmentsData} totalFocusMinutes={totalFocusMinutes} userName={userName} />
       ) : (
-        <div className="flex-1 overflow-y-auto px-10 py-10 space-y-12 styled-scrollbar">
+        <div 
+          ref={scrollContainerRef}
+          className="flex-1 overflow-y-auto px-4 md:px-10 py-6 md:py-10 pb-[160px] md:pb-[200px] space-y-10 md:space-y-12 styled-scrollbar min-h-0"
+        >
           
           {/* Final Insight */}
           <AnimatePresence>
             {finalAnswer && (
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="p-8 border rounded-3xl dark:bg-gray-900/40 dark:border-gray-800 bg-white border-gray-100 shadow-sm relative overflow-hidden group">
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="p-6 md:p-8 border rounded-3xl dark:bg-gray-900/40 dark:border-gray-800 bg-white border-gray-100 shadow-sm relative overflow-hidden group">
                 <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-indigo-500 via-[#0052FF] to-purple-500" />
                 <div className="flex items-center gap-3 mb-6">
                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 via-[#0052FF] to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
@@ -163,14 +178,14 @@ export default function CenterPanel({
           </AnimatePresence>
 
           {/* Chat History */}
-          <div className="space-y-10">
+          <div className="space-y-8 md:space-y-10">
             {chatHistory.map(msg => (
               <div key={msg.id} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[85%] flex gap-4 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
-                   <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-sm ${msg.role === "user" ? "dark:bg-gray-800 bg-gray-100 text-gray-500" : "bg-gradient-to-br from-indigo-600 via-[#0052FF] to-purple-600 text-white"}`}>
-                      {msg.role === "user" ? <User size={16} /> : <Sparkles size={16} />}
+                <div className={`max-w-[95%] md:max-w-[85%] flex gap-3 md:gap-4 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
+                   <div className={`w-8 h-8 md:w-9 md:h-9 rounded-xl flex items-center justify-center shrink-0 shadow-sm ${msg.role === "user" ? "dark:bg-gray-800 bg-gray-100 text-gray-500" : "bg-gradient-to-br from-indigo-600 via-[#0052FF] to-purple-600 text-white"}`}>
+                      {msg.role === "user" ? <User size={14} /> : <Sparkles size={14} />}
                    </div>
-                   <div className={`p-5 rounded-2xl shadow-sm leading-relaxed text-sm ${msg.role === "user" ? "dark:bg-gray-800 dark:text-gray-300 bg-gray-50 text-gray-700" : "dark:bg-gray-900 dark:border-gray-800 bg-white border border-gray-100 dark:text-gray-300 text-gray-600"}`}>
+                   <div className={`p-4 md:p-5 rounded-2xl shadow-sm leading-relaxed text-xs md:text-sm ${msg.role === "user" ? "dark:bg-gray-800 dark:text-gray-300 bg-gray-50 text-gray-700" : "dark:bg-gray-900 dark:border-gray-800 bg-white border border-gray-100 dark:text-gray-300 text-gray-600"}`}>
                       {msg.role === "ai" && !msg.text
                         ? <div className="flex items-center gap-3"><Loader2 className="animate-spin text-indigo-500" size={14} /><span className="text-[10px] font-black text-indigo-500 uppercase tracking-widest">Neural Processing...</span></div>
                         : <ReactMarkdown remarkPlugins={[remarkGfm]} components={MD}>{msg.text}</ReactMarkdown>
@@ -185,30 +200,32 @@ export default function CenterPanel({
       )}
 
       {/* Input Terminal */}
-      <div className={`p-10 pt-4 bg-gradient-to-t transition-colors ${isEmpty ? 'from-transparent' : 'dark:from-[#0A0A0B] dark:via-[#0A0A0B] from-white via-white to-transparent'}`}>
-        <form onSubmit={onSubmit} className="max-w-4xl mx-auto relative group">
+      <div className="shrink-0 px-6 md:px-10 pt-4 pb-7 bg-transparent">
+        <form onSubmit={onSubmit} className="max-w-6xl mx-auto relative group flex items-center">
           <textarea
             value={chatInput}
             onChange={e => setChatInput(e.target.value)}
             onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); onSubmit(); } }}
             disabled={isThinking}
-            placeholder="Ask a question or plan your day..."
+            placeholder="Ask a question..."
             rows={1}
-            className="w-full border rounded-[32px] pl-8 pr-20 py-6 outline-none transition-all text-sm font-medium placeholder-gray-300 shadow-sm dark:bg-gray-900 dark:border-gray-800 dark:text-white dark:focus:border-blue-500/50 dark:focus:bg-gray-800 bg-gray-50 border-gray-200 focus:border-[#0052FF]/30 focus:bg-white text-gray-900 dark:text-white"
+            className="w-full h-14 resize-none overflow-hidden border rounded-[20px] pl-6 pr-16 py-[17px] outline-none transition-all text-sm font-semibold leading-5 placeholder-gray-500/70 dark:placeholder-gray-500 dark:bg-transparent dark:border-white/10 dark:text-white dark:focus:border-indigo-400/45 dark:focus:bg-white/[0.025] bg-white border-gray-200 focus:border-indigo-500/35 focus:bg-white text-gray-900 shadow-[0_18px_50px_rgba(0,0,0,0.12)] dark:shadow-[0_18px_60px_rgba(0,0,0,0.32)]"
           />
           <button type="submit" disabled={isThinking || !chatInput.trim()}
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-gradient-to-br from-indigo-600 via-[#0052FF] to-purple-600 text-white rounded-full flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-xl shadow-indigo-500/20 disabled:opacity-20 group">
-            {isThinking ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />}
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-indigo-500/15 hover:bg-indigo-500 text-indigo-300 hover:text-white border border-indigo-400/20 rounded-2xl flex items-center justify-center transition-all shadow-none disabled:opacity-25 disabled:hover:bg-indigo-500/15 disabled:hover:text-indigo-300">
+            {isThinking ? <Loader2 size={15} className="animate-spin" /> : <Send size={15} />}
           </button>
         </form>
-        <div className="flex justify-center items-center gap-8 mt-6">
-           <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
-              <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">System Ready</span>
+        
+        {/* System Status Row */}
+        <div className="hidden sm:flex justify-center items-center gap-10 mt-6">
+           <div className="flex items-center gap-2.5 opacity-55 hover:opacity-100 transition-opacity">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+              <span className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em]">System Ready</span>
            </div>
-           <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-              <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">Stable Connection</span>
+           <div className="flex items-center gap-2.5 opacity-55 hover:opacity-100 transition-opacity">
+              <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.5)]" />
+              <span className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em]">Stable Link</span>
            </div>
         </div>
       </div>

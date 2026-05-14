@@ -2,7 +2,7 @@
 import React from "react";
 import { 
   LayoutDashboard, BookOpen, Clock, Zap, 
-  Settings, LogOut, ChevronRight, MessageSquare,
+  Settings, LogOut, ChevronRight,
   BarChart3, Brain, Layers, GraduationCap,
   Calendar, RefreshCw
 } from "lucide-react";
@@ -56,13 +56,13 @@ export default function AppSidebar({
                    {userProfile?.picture || localStorage.getItem("skillo_user_picture") ? (
                      <img src={userProfile?.picture || localStorage.getItem("skillo_user_picture")!} alt="avatar" className="w-full h-full object-cover" />
                    ) : (
-                     <span className="text-xs">{localStorage.getItem("skillo_user_name")?.slice(0, 2).toUpperCase() || "GY"}</span>
+                     <span className="text-xs">{localStorage.getItem("skillo_user_name")?.slice(0, 2).toUpperCase() || "SK"}</span>
                    )}
                 </div>
               </div>
               <div className="flex-1 min-w-0">
                  <p className="text-[10px] font-black uppercase tracking-wider dark:text-white text-[#111827] truncate">
-                   {userProfile?.name || localStorage.getItem("skillo_user_name") || "Gaurav Yadav"}
+                   {userProfile?.name || localStorage.getItem("skillo_user_name") || "Skillo User"}
                  </p>
                  <div className="flex items-center gap-1.5 mt-0.5">
                    <div className={`w-1.5 h-1.5 rounded-full ${isFocusActive ? 'bg-emerald-500 animate-pulse' : 'bg-[#0052FF]'}`} />
@@ -91,7 +91,7 @@ export default function AppSidebar({
       </div>
 
       {/* ── Navigation ── */}
-      <nav className="flex-1 px-4 space-y-1 overflow-y-auto styled-scrollbar">
+      <nav className="flex-1 px-4 space-y-1 overflow-y-auto styled-scrollbar min-h-0">
         <p className="px-4 py-3 text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em]">Navigation</p>
         {menuItems.map((item) => {
           const isActive = activeNav === item.id;

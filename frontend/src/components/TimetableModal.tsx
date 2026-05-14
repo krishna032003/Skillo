@@ -87,7 +87,7 @@ export default function TimetableModal({ isOpen, onClose, userId }: TimetableMod
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6">
       <motion.div 
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
@@ -100,33 +100,33 @@ export default function TimetableModal({ isOpen, onClose, userId }: TimetableMod
         initial={{ scale: 0.98, opacity: 0, y: 10 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.98, opacity: 0, y: 10 }}
-        className="relative w-full max-w-2xl dark:bg-[#111112] bg-white border dark:border-gray-800 border-gray-100 rounded-[32px] shadow-2xl overflow-hidden flex flex-col max-h-[85vh] transition-colors"
+        className="relative w-full max-w-2xl dark:bg-[#111112] bg-white border dark:border-gray-800 border-gray-100 rounded-[24px] md:rounded-[32px] shadow-2xl overflow-hidden flex flex-col max-h-[95vh] md:max-h-[85vh] transition-colors"
       >
-        <div className="p-8 border-b dark:border-gray-800 border-gray-100 flex justify-between items-center dark:bg-gray-900/30 bg-gray-50/50">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
-              <Calendar size={24} />
+        <div className="p-6 md:p-8 border-b dark:border-gray-800 border-gray-100 flex justify-between items-center dark:bg-gray-900/30 bg-gray-50/50">
+          <div className="flex items-center gap-3 md:gap-4">
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-indigo-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
+              <Calendar size={20} />
             </div>
-            <div>
-              <h2 className="text-xl font-display font-bold dark:text-white text-[#111827]">Temporal <span className="text-indigo-500">Planner.</span></h2>
-              <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Neural Schedule Synthesis</p>
+            <div className="min-w-0">
+              <h2 className="text-lg md:text-xl font-display font-bold dark:text-white text-[#111827] truncate">Temporal <span className="text-indigo-500">Planner.</span></h2>
+              <p className="text-[8px] md:text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] md:tracking-[0.3em] truncate">Neural Schedule Synthesis</p>
             </div>
           </div>
-          <button onClick={onClose} className="w-10 h-10 rounded-xl dark:bg-gray-800 bg-white border dark:border-gray-700 border-gray-200 text-gray-400 flex items-center justify-center hover:text-indigo-500 transition-colors">
-            <X size={20} />
+          <button onClick={onClose} className="w-8 h-8 md:w-10 md:h-10 rounded-xl dark:bg-gray-800 bg-white border dark:border-gray-700 border-gray-200 text-gray-400 flex items-center justify-center hover:text-indigo-500 transition-colors shrink-0">
+            <X size={18} />
           </button>
         </div>
 
-        <div className="p-8 overflow-y-auto styled-scrollbar flex-1">
+        <div className="p-5 md:p-8 overflow-y-auto styled-scrollbar flex-1">
           {schedule ? (
-            <div className="space-y-8">
-              <div className="p-6 rounded-3xl dark:bg-indigo-500/10 dark:border-indigo-500/20 bg-indigo-50 border-indigo-100 text-indigo-700 dark:text-indigo-300 text-sm font-medium leading-relaxed">
-                <Sparkles size={16} className="inline mr-2 -mt-1" />
+            <div className="space-y-6 md:space-y-8">
+              <div className="p-5 md:p-6 rounded-2xl md:rounded-3xl dark:bg-indigo-500/10 dark:border-indigo-500/20 bg-indigo-50 border-indigo-100 text-indigo-700 dark:text-indigo-300 text-xs md:text-sm font-medium leading-relaxed">
+                <Sparkles size={14} className="inline mr-2 -mt-1" />
                 {schedule.message}
               </div>
               
-              <div className="space-y-4 relative">
-                <div className="absolute left-[21px] top-4 bottom-4 w-px dark:bg-gray-800 bg-gray-100" />
+              <div className="space-y-3 md:space-y-4 relative">
+                <div className="absolute left-[18px] md:left-[21px] top-4 bottom-4 w-px dark:bg-gray-800 bg-gray-100" />
                 
                 {schedule.schedule.map((item, i) => (
                   <motion.div 
@@ -134,22 +134,22 @@ export default function TimetableModal({ isOpen, onClose, userId }: TimetableMod
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.05 }}
                     key={i} 
-                    className="relative flex items-center gap-5 group"
+                    className="relative flex items-center gap-4 md:gap-5 group"
                   >
-                    <div className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 z-10 transition-all ${item.type === 'break' ? 'dark:bg-gray-800 bg-gray-100 text-gray-400' : 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20'}`}>
-                      {item.type === 'break' ? <Coffee size={18} /> : <CheckCircle2 size={18} />}
+                    <div className={`w-9 h-9 md:w-11 md:h-11 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 z-10 transition-all ${item.type === 'break' ? 'dark:bg-gray-800 bg-gray-100 text-gray-400' : 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20'}`}>
+                      {item.type === 'break' ? <Coffee size={16} /> : <CheckCircle2 size={16} />}
                     </div>
-                    <div className={`flex-1 p-5 rounded-3xl border transition-all ${item.type === 'break' ? 'dark:border-gray-800/50 border-gray-100 dark:bg-gray-900/40 bg-gray-50/50' : 'dark:border-indigo-500/30 border-indigo-100 dark:bg-indigo-500/5 bg-indigo-50/30'}`}>
+                    <div className={`flex-1 p-4 md:p-5 rounded-2xl md:rounded-3xl border transition-all ${item.type === 'break' ? 'dark:border-gray-800/50 border-gray-100 dark:bg-gray-900/40 bg-gray-50/50' : 'dark:border-indigo-500/30 border-indigo-100 dark:bg-indigo-500/5 bg-indigo-50/30'}`}>
                       <div className="flex justify-between items-center">
-                        <div>
-                          <p className={`font-display font-bold ${item.type === 'break' ? 'text-gray-500' : 'dark:text-white text-gray-800'}`}>{item.task}</p>
-                          <div className="flex items-center gap-3 mt-1.5 opacity-60">
-                            <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-gray-400">
-                               <Clock size={12} /> {item.time}
+                        <div className="min-w-0">
+                          <p className={`text-xs md:text-sm font-display font-bold truncate ${item.type === 'break' ? 'text-gray-500' : 'dark:text-white text-gray-800'}`}>{item.task}</p>
+                          <div className="flex items-center gap-2 md:gap-3 mt-1 md:mt-1.5 opacity-60">
+                            <div className="flex items-center gap-1 text-[8px] md:text-[10px] font-black uppercase tracking-widest text-gray-400">
+                               <Clock size={10} /> {item.time}
                             </div>
                             <span className="text-gray-300 dark:text-gray-700">|</span>
-                            <div className="text-[10px] font-black uppercase tracking-widest text-gray-400">
-                               {item.duration} Min Session
+                            <div className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-gray-400">
+                               {item.duration} Min
                             </div>
                           </div>
                         </div>
@@ -159,18 +159,18 @@ export default function TimetableModal({ isOpen, onClose, userId }: TimetableMod
                 ))}
               </div>
               
-              <div className="flex justify-end gap-3 pt-6">
+              <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 md:pt-6">
                 <button onClick={() => setSchedule(null)} className="px-6 py-3 text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-indigo-500 transition-colors">
                   Reset Architecture
                 </button>
-                <button onClick={onClose} className="px-8 py-3 bg-indigo-500 text-white rounded-2xl font-display font-black text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-indigo-500/20 transition-all hover:bg-indigo-600 active:scale-95">
+                <button onClick={onClose} className="px-8 py-3.5 bg-indigo-500 text-white rounded-2xl font-display font-black text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-indigo-500/20 transition-all hover:bg-indigo-600 active:scale-95">
                   Confirm Plan
                 </button>
               </div>
             </div>
           ) : (
-            <div className="space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-6 md:space-y-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
                 <div className="space-y-2">
                   <label className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.3em] ml-2">Available Window</label>
                   <div className="relative">
@@ -204,17 +204,17 @@ export default function TimetableModal({ isOpen, onClose, userId }: TimetableMod
               <div className="space-y-4">
                 <label className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.3em] ml-2">Task Injection</label>
                 
-                <div className="flex flex-col md:flex-row gap-3">
+                <div className="flex flex-col gap-3">
                   <input 
                     type="text" 
                     placeholder="Identify active objective..." 
                     value={newTask.title}
                     onChange={e => setNewTask({...newTask, title: e.target.value})}
                     onKeyDown={e => e.key === 'Enter' && handleAddTask()}
-                    className="flex-1 dark:bg-gray-900 bg-gray-50 border dark:border-gray-800 border-gray-100 rounded-2xl px-5 py-4 text-sm font-bold dark:text-white text-gray-800 focus:border-indigo-500/50 outline-none transition-all"
+                    className="w-full dark:bg-gray-900 bg-gray-50 border dark:border-gray-800 border-gray-100 rounded-2xl px-5 py-4 text-sm font-bold dark:text-white text-gray-800 focus:border-indigo-500/50 outline-none transition-all"
                   />
                   <div className="flex gap-3">
-                    <div className="relative w-28 shrink-0">
+                    <div className="relative flex-1">
                       <input 
                         type="number" 
                         placeholder="MIN" 
@@ -226,7 +226,7 @@ export default function TimetableModal({ isOpen, onClose, userId }: TimetableMod
                     </div>
                     <button 
                       onClick={handleAddTask}
-                      className="w-14 h-14 bg-indigo-500 text-white rounded-2xl flex items-center justify-center hover:bg-indigo-600 transition-all shadow-lg shadow-indigo-500/20 active:scale-90"
+                      className="w-14 h-14 bg-indigo-500 text-white rounded-2xl flex items-center justify-center hover:bg-indigo-600 transition-all shadow-lg shadow-indigo-500/20 active:scale-90 shrink-0"
                     >
                       <Plus size={24} />
                     </button>
@@ -235,27 +235,27 @@ export default function TimetableModal({ isOpen, onClose, userId }: TimetableMod
                 
                 <div className="space-y-3 mt-4">
                   {tasks.length === 0 ? (
-                    <div className="py-12 border-2 border-dashed dark:border-gray-800 border-gray-100 rounded-[32px] flex flex-col items-center justify-center text-gray-300">
-                       <Zap size={32} className="opacity-10 mb-3" />
-                       <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40">Awaiting Node Input</p>
+                    <div className="py-10 md:py-12 border-2 border-dashed dark:border-gray-800 border-gray-100 rounded-[24px] md:rounded-[32px] flex flex-col items-center justify-center text-gray-300">
+                       <Zap size={28} className="opacity-10 mb-3" />
+                       <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">Awaiting Node Input</p>
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[30vh] overflow-y-auto pr-2 styled-scrollbar">
                       {tasks.map((t, idx) => (
                         <motion.div 
                           initial={{ opacity: 0, scale: 0.95 }}
                           animate={{ opacity: 1, scale: 1 }}
                           key={idx} 
-                          className="flex justify-between items-center p-4 rounded-2xl dark:bg-gray-900/40 bg-gray-50/50 border dark:border-gray-800 border-gray-100 group"
+                          className="flex justify-between items-center p-3.5 md:p-4 rounded-2xl dark:bg-gray-900/40 bg-gray-50/50 border dark:border-gray-800 border-gray-100 group"
                         >
                           <div className="flex items-center gap-3 overflow-hidden">
                             <span className={`w-2 h-2 rounded-full shrink-0 ${t.priority === 'High' ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.4)]' : t.priority === 'Medium' ? 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.4)]' : 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]'}`} />
                             <div className="overflow-hidden">
-                                <p className="dark:text-white text-gray-800 text-xs font-bold truncate font-display">{t.title}</p>
+                                <p className="dark:text-white text-gray-800 text-[11px] md:text-xs font-bold truncate font-display">{t.title}</p>
                                 <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest">{t.durationMinutes} Min Session</p>
                             </div>
                           </div>
-                          <button onClick={() => handleRemoveTask(idx)} className="p-2 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all">
+                          <button onClick={() => handleRemoveTask(idx)} className="p-2 text-gray-400 hover:text-red-500 transition-colors">
                             <Trash2 size={14} />
                           </button>
                         </motion.div>
@@ -274,17 +274,17 @@ export default function TimetableModal({ isOpen, onClose, userId }: TimetableMod
               <button 
                 onClick={handleGenerate}
                 disabled={isGenerating || tasks.length === 0}
-                className="w-full mt-6 py-5 bg-indigo-500 text-white font-display font-black text-[11px] uppercase tracking-[0.3em] rounded-[24px] hover:bg-indigo-600 shadow-2xl shadow-indigo-500/30 transition-all disabled:opacity-40 disabled:grayscale flex items-center justify-center gap-3 group"
+                className="w-full mt-4 md:mt-6 py-4 md:py-5 bg-indigo-500 text-white font-display font-black text-[10px] md:text-[11px] uppercase tracking-[0.2em] md:tracking-[0.3em] rounded-[20px] md:rounded-[24px] hover:bg-indigo-600 shadow-2xl shadow-indigo-500/30 transition-all disabled:opacity-40 disabled:grayscale flex items-center justify-center gap-3 group"
               >
                 {isGenerating ? (
                   <>
                     <Loader2 size={18} className="animate-spin" />
-                    Synchronizing Matrix...
+                    Synchronizing...
                   </>
                 ) : (
                   <>
                     <Sparkles size={18} className="group-hover:rotate-12 transition-transform" />
-                    Generate Neural Plan
+                    Generate Plan
                   </>
                 )}
               </button>
