@@ -48,28 +48,61 @@ graph TD
 
 ---
 
+---
+
 ## Deployment & Setup
 
 ### Prerequisites
 *   Python 3.12+
 *   Node.js 20+
 *   Google Gemini API Credentials
+*   MongoDB Atlas Account (Required for persistent data)
 
-### Backend (API & Agents)
-```bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python main.py
-```
+### Local Development
+1. **Backend**:
+   ```bash
+   cd backend
+   python -m venv .venv
+   source .venv/bin/activate  # Windows: .venv\Scripts\activate
+   pip install -r requirements.txt
+   python main.py
+   ```
+2. **Frontend**:
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
 
-### Frontend (Dashboard)
-```bash
-cd frontend
-npm install
-npm run dev
-```
+### Production Deployment
+
+#### Backend (Render)
+1. Create a new **Web Service** on [Render](https://render.com/).
+2. Connect your GitHub repository.
+3. Configuration:
+   - **Root Directory**: `.`
+   - **Runtime**: `Python`
+   - **Build Command**: `pip install -r backend/requirements.txt`
+   - **Start Command**: `gunicorn backend.main:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT`
+   - **Health Check Path**: `/health`
+4. **Environment Variables**:
+   - `GEMINI_API_KEY`: Your Google Gemini key.
+   - `MONGO_URI`: Your MongoDB Atlas connection string.
+   - `GOOGLE_CLIENT_ID`: Your Google OAuth Client ID.
+   - `ALLOWED_ORIGINS`: `https://your-app.vercel.app` (Your Vercel URL).
+   - `PINECONE_API_KEY`: (Optional) For advanced RAG features.
+
+> [!NOTE]
+> Render's free tier spins down after inactivity, causing a "cold start" delay of ~30 seconds on the first request.
+
+#### Frontend (Vercel)
+1. Import your repository into [Vercel](https://vercel.com/).
+2. Set the **Root Directory** to `frontend`.
+3. **Environment Variables**:
+   - `NEXT_PUBLIC_API_BASE_URL`: Your Render backend URL (e.g., `https://skillo-api.onrender.com`).
+   - `NEXT_PUBLIC_GOOGLE_CLIENT_ID`: Same as backend.
+   - `NEXT_PUBLIC_CLASSROOM_CLIENT_ID`: Same as backend.
+4. Deploy.
 
 ---
 
