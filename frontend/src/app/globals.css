@@ -25,11 +25,12 @@
   -webkit-font-smoothing: antialiased;
 }
 
-html, body, #__next { 
-  height: 100%; 
+html, body { 
+  min-height: 100%; 
   background: var(--background);
   color: var(--foreground);
   overflow-x: hidden;
+  overflow-y: auto;
   font-family: var(--font-body);
 }
 
