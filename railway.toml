@@ -6,7 +6,7 @@ dockerfilePath = "backend/Dockerfile"
 startCommand = "gunicorn backend.main:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT"
 healthcheckPath = "/health"
 healthcheckTimeout = 100
-restartPolicyType = "on-failure"
+restartPolicyType = "ON_FAILURE"
 
 [env]
 PORT = "8000"
