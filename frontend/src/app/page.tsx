@@ -73,10 +73,22 @@ export default function Home() {
       .then(d => { if (d.active) { setIsFocusActive(true); setFocusEndTime(d.end_time); } })
       .catch(() => {});
 
-    // Activity-based focus score
+    // Activity-based focus score (Throttled update)
     let activityLevel = 0;
-    const tick = () => { activityLevel += 0.05; if (activityLevel > 100) activityLevel = 100; setFocusProgress(p => Math.min(100, Math.max(0, Math.floor(p + activityLevel * 0.05)))); };
-    const decay = setInterval(() => { activityLevel = Math.max(0, activityLevel - 2); if (activityLevel === 0) setFocusProgress(p => Math.max(0, p - 1)); }, 2000);
+    let lastUpdate = 0;
+    const tick = () => { 
+      activityLevel += 0.05; 
+      if (activityLevel > 100) activityLevel = 100;
+      const now = Date.now();
+      if (now - lastUpdate > 1000) { // Update state at most once per second
+        setFocusProgress(p => Math.min(100, Math.max(0, Math.floor(p + activityLevel * 0.05))));
+        lastUpdate = now;
+      }
+    };
+    const decay = setInterval(() => { 
+      activityLevel = Math.max(0, activityLevel - 2); 
+      if (activityLevel === 0) setFocusProgress(p => Math.max(0, p - 1)); 
+    }, 2000);
     window.addEventListener("mousemove", tick);
     window.addEventListener("click", tick);
     window.addEventListener("keydown", tick);
@@ -350,6 +362,7 @@ export default function Home() {
                 onOpenTimetable={() => setIsTimetableOpen(true)}
                 onOpenFocus={() => setIsFocusOpen(true)}
                 onOpenMaterials={() => setIsMaterialsOpen(true)}
+                userName={userProfile?.name}
               />
             )
           }

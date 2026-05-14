@@ -16,6 +16,7 @@ interface CenterPanelProps {
   isThinking: boolean; finalAnswer: string; assignmentsData: Assignment[];
   totalFocusMinutes: number; onAction: (cmd: string, label: string) => void;
   onOpenTimetable: () => void; onOpenFocus: () => void; onOpenMaterials: () => void;
+  userName?: string;
 }
 
 /* ─── Markdown Renderer ─── */
@@ -44,9 +45,10 @@ interface EmptyWorkspaceProps {
   onOpenMaterials: () => void;
   assignmentsData: Assignment[];
   totalFocusMinutes: number;
+  userName?: string;
 }
 
-function EmptyWorkspace({ onAction, onOpenFocus, onOpenMaterials, assignmentsData, totalFocusMinutes }: EmptyWorkspaceProps) {
+function EmptyWorkspace({ onAction, onOpenFocus, onOpenMaterials, assignmentsData, totalFocusMinutes, userName }: EmptyWorkspaceProps) {
   return (
     <div className="flex-1 overflow-y-auto px-10 py-16 space-y-16 max-w-6xl mx-auto w-full">
       
@@ -54,7 +56,7 @@ function EmptyWorkspace({ onAction, onOpenFocus, onOpenMaterials, assignmentsDat
       <div className="space-y-4">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className="font-display text-5xl leading-tight dark:text-white text-[#111827]">
-            Hello, <span className="bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">Gaurav.</span> <br />
+            Hello, <span className="bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">{userName || "Student"}.</span> <br />
             Ready to <span className="italic opacity-80">optimize?</span>
           </h1>
           <p className="text-gray-400 font-medium text-base mt-4 max-w-lg leading-relaxed">
@@ -127,6 +129,7 @@ export default function CenterPanel({
   chatHistory, chatInput, setChatInput, onSubmit, isThinking,
   finalAnswer, assignmentsData, totalFocusMinutes,
   onAction, onOpenTimetable, onOpenFocus, onOpenMaterials,
+  userName
 }: CenterPanelProps) {
   const endRef = useRef<HTMLDivElement>(null);
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [chatHistory, finalAnswer]);
@@ -137,7 +140,7 @@ export default function CenterPanel({
     <div className="flex flex-col h-full relative dark:bg-[#0A0A0B] bg-white transition-colors">
       
       {isEmpty ? (
-        <EmptyWorkspace onAction={onAction} onOpenFocus={onOpenFocus} onOpenMaterials={onOpenMaterials} assignmentsData={assignmentsData} totalFocusMinutes={totalFocusMinutes} />
+        <EmptyWorkspace onAction={onAction} onOpenFocus={onOpenFocus} onOpenMaterials={onOpenMaterials} assignmentsData={assignmentsData} totalFocusMinutes={totalFocusMinutes} userName={userName} />
       ) : (
         <div className="flex-1 overflow-y-auto px-10 py-10 space-y-12 styled-scrollbar">
           
