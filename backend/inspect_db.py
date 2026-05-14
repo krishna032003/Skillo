@@ -1,9 +1,11 @@
 import asyncio
+import os
 from motor.motor_asyncio import AsyncIOMotorClient
 
 async def main():
-    client = AsyncIOMotorClient('mongodb://localhost:27017')
-    db = client.get_database("skillo")
+    mongo_uri = os.getenv("MONGO_URI", "mongodb://localhost:27017/skillo")
+    client = AsyncIOMotorClient(mongo_uri)
+    db = client.get_database()
     doc = await db.users.find_one({"user_id": "Krishna Sahu"})
     print("Database Document for Krishna Sahu:")
     print(doc)
